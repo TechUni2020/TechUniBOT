@@ -1,11 +1,12 @@
 import os
 import sys
-from techuni_object import JoinApplier, DatabaseController, DiscordController
 
 # パス登録 - アプリケーションディレクトリ
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '')))
 # パス登録 - BOTディレクトリ
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'techuni_object')))
+
+from techuni_object import JoinApplier, DatabaseController, DiscordController
 
 class TechUniBOT:
     def __init__(self, config_path: str):
