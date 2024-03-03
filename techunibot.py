@@ -9,7 +9,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'tech
 from techuni_object import JoinApplier, DatabaseController, DiscordController
 
 class TechUniBOT:
-    def __init__(self, config_path: str):
+    def __init__(self, config_path: str = None):
+        if config_path is None:
+            config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'config'))
         self.db_controller = DatabaseController(config_path)
         self.discord_controller = DiscordController(config_path)
 
