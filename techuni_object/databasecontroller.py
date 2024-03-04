@@ -13,4 +13,4 @@ class DatabaseController:
         self.db_client: Client = create_client(db_auth["URL"], db_auth["KEY"])
 
     def join_apply(self, applier: JoinApplier):
-        self.db_client.table("JoinApplier").insert(applier.to_dict()).execute()
+        self.db_client.rpc("recieve_JoinApply", applier.to_dict()).execute()
