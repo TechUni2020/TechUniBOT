@@ -1,3 +1,3 @@
-from techuni_object.joinapplier import JoinApplier
+from techuni_object.joinapply import JoinApply
 from techuni_object.databasecontroller import DatabaseController
 from techuni_object.discordcontroller import DiscordController

@@ -1,5 +1,5 @@
 from datetime import datetime
-class JoinApplier:
+class JoinApply:
     def __init__(self, data: dict):
         self.mail_addr = data["mail_address"]
         _applied_at = datetime.strptime(data["applied_at"], "%Y-%m-%d %H:%M:%S %z") # ex) 2024-01-01 01:11:11 +0900
