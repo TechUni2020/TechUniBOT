@@ -56,15 +56,21 @@ class JoinApply:
 
     def to_dict(self):
         return {
-            "mail_address": self.mail_addr,
-            "applied_at": self.applied_at,
-            "name": self.name,
-            "university": self.univ,
-            "department": self.dep,
-            "grade": self.grade,
-            "reason": self.reason,
-            "opportunity": self.opportunity,
-            "possible_dates": self.possible_dates
+            "ID": self.id,
+            "applied_at": self.applied_at.strftime(self._DATE_FORMAT),
+            "mail_address": self.mail_address,
+            "applier": {
+                "name": self.name,
+                "school": self.school,
+                "department": self.department,
+                "grade": self.grade,
+                "opportunity": self.opportunity
+            },
+            "details": {
+                "reason": self.reason,
+                "goal": self.goal,
+                "product": self.product
+            }
         }
 
     def __str__(self):
