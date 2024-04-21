@@ -1,22 +1,26 @@
-import os
-import sys
+import discord
+from flask import Flask, request, jsonify
+from multiprocessing import Process
 
-# パス登録 - アプリケーションディレクトリ
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '')))
-# パス登録 - BOTディレクトリ
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'techuni_object')))
+from techuni_flask import app as flask_app
 
-from techuni_object import JoinApplier, DatabaseController, DiscordController
+app = Flask(__name__)
+app.register_blueprint(flask_app)
 
-class TechUniBOT:
-    def __init__(self, config_path: str):
-        self.db_controller = DatabaseController(config_path)
-        self.discord_controller = DiscordController(config_path)
+def run_flask():
+    app.run()
 
-    def join_apply(self, applier: dict | JoinApplier):
-        if isinstance(applier, dict):
-            applier = JoinApplier(applier)
-        self.db_controller.join_apply(applier)
-        self.discord_controller.join_apply(applier)
+def run_discord():
+    pass
 
+if __name__ == "__main__":
+    flask_process = Process(target=run_flask)
+    discord_process = Process(target=run_discord)
 
+    # process start
+    flask_process.start()
+    discord_process.start()
+
+    # process join(終了待ち)
+    flask_process.join()
+    discord_process.join()
