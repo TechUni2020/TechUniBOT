@@ -1,7 +1,7 @@
 import os
 import yaml
 from supabase import create_client, Client
-from .joinapply import JoinApply
+from .join_apply import JoinApply
 
 class DatabaseController:
     def __init__(self, config_folder_path: str):
