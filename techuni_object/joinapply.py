@@ -5,12 +5,14 @@ import hmac
 import hashlib
 
 class JoinApply:
+    _DATE_FORMAT = "%Y-%m-%d %H:%M:%S %z"
+
     def __init__(self, data: dict):
         # ID
         self.id: str = data["ID"]
         # 申請日時 ex) data内は、2024-01-01 01:11:11 +0900
         self.applied_at: datetime = (
-            datetime.strptime(data["applied_at"],"%Y-%m-%d %H:%M:%S %z")
+            datetime.strptime(data["applied_at"], self._DATE_FORMAT)
         )
         # メールアドレス
         self.mail_address: str = data["mail_address"]
