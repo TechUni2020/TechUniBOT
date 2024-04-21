@@ -1,16 +1,56 @@
 from datetime import datetime
+import base64
+import json
+import hmac
+import hashlib
+
 class JoinApply:
     def __init__(self, data: dict):
-        self.mail_addr = data["mail_address"]
-        _applied_at = datetime.strptime(data["applied_at"], "%Y-%m-%d %H:%M:%S %z") # ex) 2024-01-01 01:11:11 +0900
-        self.applied_at: str = str(_applied_at)
-        self.name: str = data["name"]
-        self.univ: str = data["university"]
-        self.dep: str = data["department"]
-        self.grade: str = data["grade"]
-        self.reason: str = data["reason"]
-        self.opportunity: str | None = data.get("opportunity", None)  # opportunityのみNULL許容
-        self.possible_dates: str = data["possible_dates"]
+        # ID
+        self.id: str = data["ID"]
+        # 申請日時 ex) data内は、2024-01-01 01:11:11 +0900
+        self.applied_at: datetime = (
+            datetime.strptime(data["applied_at"],"%Y-%m-%d %H:%M:%S %z")
+        )
+        # メールアドレス
+        self.mail_address: str = data["mail_address"]
+
+        # 申請者情報
+        ap = data["applier"]
+        # 氏名
+        self.name: str = ap["name"]
+        # 学校
+        self.school: str = ap["school"]
+        # 学部
+        self.department: str = ap["department"]
+        # 学年
+        self.grade: str = ap["grade"]
+        # 知ったきっかけ
+        self.opportunity: str = ap["opportunity"]
+
+        # 入会情報
+        det = data["details"]
+        # 入会理由
+        self.reason: str = det["reason"]
+        # やりたいこと
+        self.goal: str = det["goal"]
+        # 作りたいプロダクト
+        self.product: str = det["product"]
+
+    @staticmethod
+    def from_webhook(data: dict, key: str):
+        d: dict = data.copy()
+        sign: str = d.pop("sign")
+
+        secretkey_b: bytes = key.encode("utf-8")
+        payload_b: bytes = base64.b64encode(
+            json.dumps(d, separators=(',', ':'), ensure_ascii=False).encode("utf-8")
+        )
+
+        calc_sign = hmac.new(secretkey_b, payload_b, hashlib.sha256).hexdigest()
+        if calc_sign != sign:
+            raise ValueError("Invalid sign")
+        return JoinApply(d)
 
     def to_dict(self):
         return {
@@ -24,3 +64,7 @@ class JoinApply:
             "opportunity": self.opportunity,
             "possible_dates": self.possible_dates
         }
+
+    def __str__(self):
+        # 全項目列挙
+        return f"JoinApply({self.id}, {self.applied_at}, {self.mail_address}, {self.name}, {self.school}, {self.department}, {self.grade}, {self.reason}, {self.opportunity}, {self.possible_dates})"
