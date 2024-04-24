@@ -1,4 +1,3 @@
-import discord
 from flask import Flask, request, jsonify
 from multiprocessing import Process
 
