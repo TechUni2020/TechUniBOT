@@ -1,16 +1,25 @@
-from flask import Flask, request, jsonify
+import discord
+import os
+from flask import Flask
 from multiprocessing import Process
 
 from techuni_flask import app as flask_app
+from techuni_discord import TechUniDiscordBot
 
 app = Flask(__name__)
 app.register_blueprint(flask_app)
+
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+
+bot = TechUniDiscordBot(intents=intents)
 
 def run_flask():
     app.run()
 
 def run_discord():
-    pass
+    bot.run(os.environ.get("DISCORD_BOT_TOKEN"))
 
 if __name__ == "__main__":
     flask_process = Process(target=run_flask)
