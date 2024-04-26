@@ -7,7 +7,7 @@ app = Blueprint('app', __name__)
 with open(os.environ.get("gas_signkey_file"), mode="r") as f:
     secretKey = "".join([k.rstrip("\n") for k in f.readlines()])
 
-@app.route('/join_application',methods=['POST'])
+@app.route('/join_application/receive',methods=['POST'])
 def receive_join_application():
     if request.headers['Content-Type'] != 'application/json':
         return jsonify(res='content-type error'), 400
