@@ -1,5 +1,5 @@
 import discord
-from techuni_object import JoinApply
+from techuni_object import JoinApplication
 class TechUniDiscordBot(discord.Client):
     async def on_ready(self):
         pass
