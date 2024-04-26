@@ -1,2 +1,2 @@
-from techuni_object.join_apply import JoinApply
+from techuni_object.join_application import JoinApplication
 from techuni_object.db_controller import DatabaseController
