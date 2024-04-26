@@ -12,8 +12,9 @@ app.register_blueprint(flask_app)
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
-
-bot = TechUniDiscordBot(intents=intents)
+# 親ファイル
+_bot_config = os.path.abspath(os.path.join(os.path.dirname(__file__), "config", "discord.yml"))
+bot = TechUniDiscordBot(intents=intents, path_config_file=_bot_config)
 
 def run_flask():
     app.run()
