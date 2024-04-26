@@ -44,7 +44,12 @@ class TechUniDiscordBot(discord.Client):
         pass
 
     async def notify_application(self, application: JoinApplication):
-        pass
+        await self.channel_join_appl.create_thread(
+            name=application.name,
+            content=application.create_initial_message(),
+            allowed_mentions=discord.AllowedMentions(roles=True),
+            reason=f"入会者フォーム回答({application.name} さん)"
+        )
 
     @tasks.loop(seconds=60)
     async def checkForm(self):
