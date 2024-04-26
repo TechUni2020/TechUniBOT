@@ -4,7 +4,7 @@ import json
 import hmac
 import hashlib
 
-class JoinApply:
+class JoinApplication:
     _DATE_FORMAT = "%Y-%m-%d %H:%M:%S %z"
 
     def __init__(self, data: dict):
@@ -52,7 +52,7 @@ class JoinApply:
         calc_sign = hmac.new(secretkey_b, payload_b, hashlib.sha256).hexdigest()
         if calc_sign != sign:
             raise ValueError("Invalid sign")
-        return JoinApply(d)
+        return JoinApplication(d)
 
     def to_dict(self):
         return {
@@ -75,4 +75,4 @@ class JoinApply:
 
     def __str__(self):
         # 全項目列挙
-        return f"JoinApply({self.id}, {self.applied_at}, {self.mail_address}, {self.name}, {self.school}, {self.department}, {self.grade}, {self.reason}, {self.opportunity}, {self.possible_dates})"
+        return f"JoinApplication({self.id}, {self.applied_at}, {self.mail_address}, {self.name}, {self.school}, {self.department}, {self.grade}, {self.reason}, {self.opportunity}, {self.possible_dates})"

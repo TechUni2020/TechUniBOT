@@ -1,7 +1,7 @@
 import os
 import yaml
 from supabase import create_client, Client
-from .join_apply import JoinApply
+from .join_application import JoinApplication
 
 class DatabaseController:
     def __init__(self, config_folder_path: str):
@@ -12,5 +12,5 @@ class DatabaseController:
             db_auth = yaml.safe_load(f)
         self.db_client: Client = create_client(db_auth["URL"], db_auth["KEY"])
 
-    def join_apply(self, applier: JoinApply):
+    def join_apply(self, applier: JoinApplication):
         self.db_client.rpc("recieve_JoinApply", applier.to_dict()).execute()
