@@ -9,14 +9,20 @@ flask_applier = Queue()
 class TechUniDiscordBot(discord.Client):
     def __init__(self, *args, path_config_file: str, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.channel_join_appl = None
+        self.guild = None
         with open(path_config_file, "r") as f:
             self.config: dict = safe_load(f)
 
+    async def on_ready(self):
+        print(f"Logged on as {self.user.name} ({self.user.id})")
+
         # Load GuildID from config
-        _g_uid = self.config.get("guild_id")
+        _g_uid = int(self.config.get("guild_id"))
         if _g_uid is None:
             raise ValueError("guild_id is not found in config file")
-
+        
         # Load Guild
         self.guild = self.get_guild(_g_uid)
         if self.guild is None:
@@ -26,7 +32,7 @@ class TechUniDiscordBot(discord.Client):
         _chid = self.config.get("channel_id")
         if _chid is None:
             raise ValueError("channel_id is not found in config file")
-        _chid_join_appl = _chid.get("join_application")
+        _chid_join_appl = int(_chid.get("join_application"))
         if _chid_join_appl is None:
             raise ValueError("join_application is not found in channel_id")
 
@@ -34,11 +40,11 @@ class TechUniDiscordBot(discord.Client):
         self.channel_join_appl: discord.ForumChannel = self.guild.get_channel(_chid_join_appl)
         if self.channel_join_appl is None:
             raise ValueError(f"Channel({_chid_join_appl}) is not found")
-        if self.channel_join_appl is not discord.ForumChannel:
-            raise ValueError(f"Channel({self.channel_join_appl.name}) is not ForumChannel")
+        if not isinstance(self.channel_join_appl, discord.ForumChannel):
+            raise ValueError(f"Channel({self.channel_join_appl.name}) is not ForumChannel(is {type(self.channel_join_appl)})")
 
-    async def on_ready(self):
-        print(f"Logged on as {self.user.name} ({self.user.id})")
+        checkForm_task = self.checkForm.start()
+        print(f"TechUniDiscordBot is ready. {checkForm_task.get_name()}")
 
     async def on_message(self, message):
         pass
