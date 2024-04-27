@@ -4,6 +4,7 @@ import json
 import hmac
 import hashlib
 import os
+import codecs
 
 class JoinApplication:
     _DATE_FORMAT = "%Y-%m-%d %H:%M:%S %z"
@@ -79,7 +80,7 @@ class JoinApplication:
     @classmethod
     def from_template(cls) -> str:
         if cls._appl_template is None:
-            with open(cls._appl_template_file, "r") as f:
+            with codecs.open(cls._appl_template_file, "r", "utf-8") as f:
                 cls._appl_template = f.read()
         return cls._appl_template
 
