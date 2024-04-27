@@ -56,6 +56,12 @@ class TechUniDiscordBot(discord.Client):
             reason=f"入会者フォーム回答({application.name} さん)"
         )
 
+    @classmethod
+    def add_application(cls, application: JoinApplication):
+        if cls.flask_applier is None:
+            raise ValueError("flask_applier is not set")
+        cls.flask_applier.put(application)
+
     @tasks.loop(seconds=60)
     async def checkForm(self):
         while not self.flask_applier.empty():
