@@ -4,9 +4,8 @@ from techuni_object import JoinApplication
 from multiprocessing import Queue
 from yaml import safe_load
 
-flask_applier = Queue()
-
 class TechUniDiscordBot(discord.Client):
+    flask_applier: Queue = None
     def __init__(self, *args, path_config_file: str, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -59,6 +58,6 @@ class TechUniDiscordBot(discord.Client):
 
     @tasks.loop(seconds=60)
     async def checkForm(self):
-        while not flask_applier.empty():
-            application: JoinApplication = flask_applier.get()
+        while not self.flask_applier.empty():
+            application: JoinApplication = self.flask_applier.get()
             await self.notify_application(application)
