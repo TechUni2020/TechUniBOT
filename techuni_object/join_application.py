@@ -88,7 +88,7 @@ class JoinApplication:
         mes = self.from_template()
         for attr in vars(self):
             val = getattr(self, attr)
-            mes = mes.replace(f"%%{attr}%%", val)
+            mes = mes.replace(f"%%{attr}%%", str(val))
         return mes
 
     def __str__(self):
