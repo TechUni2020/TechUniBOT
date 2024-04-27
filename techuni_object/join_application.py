@@ -84,7 +84,7 @@ class JoinApplication:
         return cls._appl_template
 
     def create_initial_message(self):
-        mes = self._appl_template
+        mes = self.from_template()
         for attr in vars(self):
             val = getattr(self, attr)
             mes = mes.replace(f"%%{attr}%%", val)
