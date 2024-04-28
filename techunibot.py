@@ -23,7 +23,7 @@ def run_discord(discord_appliers):
     TechUniDiscordBot.flask_applier = discord_appliers  # DiscordスレッドにapplierQueueを追加
     bot.run(str(os.environ.get("DISCORD_BOT_TOKEN")))
 
-if __name__ == "__main__":
+def main():
     queue_discord_appliers = Queue()
     flask_process = Process(target=run_flask, args=(queue_discord_appliers,))
     discord_process = Process(target=run_discord, args=(queue_discord_appliers,))
@@ -35,3 +35,6 @@ if __name__ == "__main__":
     # process join(終了待ち)
     flask_process.join()
     discord_process.join()
+
+if __name__ == "__main__":
+    main()
