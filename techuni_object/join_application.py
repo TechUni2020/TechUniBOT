@@ -3,10 +3,14 @@ import base64
 import json
 import hmac
 import hashlib
+import os
+import codecs
 
 class JoinApplication:
     _DATE_FORMAT = "%Y-%m-%d %H:%M:%S %z"
 
+    _appl_template_file = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "template", "join_application.md"))
+    _appl_template = None
     def __init__(self, data: dict):
         # ID
         self.id: str = data["ID"]
@@ -72,6 +76,20 @@ class JoinApplication:
                 "product": self.product
             }
         }
+
+    @classmethod
+    def from_template(cls) -> str:
+        if cls._appl_template is None:
+            with codecs.open(cls._appl_template_file, "r", "utf-8") as f:
+                cls._appl_template = f.read()
+        return cls._appl_template
+
+    def create_initial_message(self):
+        mes = self.from_template()
+        for attr in vars(self):
+            val = getattr(self, attr)
+            mes = mes.replace(f"%%{attr}%%", str(val))
+        return mes
 
     def __str__(self):
         # 全項目列挙
