@@ -9,7 +9,7 @@ import codecs
 class JoinApplication:
     _DATE_FORMAT = "%Y-%m-%d %H:%M:%S %z"
 
-    _appl_template_file = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "template", "join_application.txt"))
+    _appl_template_file = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "template", "join_application.md"))
     _appl_template = None
     def __init__(self, data: dict):
         # ID
