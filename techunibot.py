@@ -13,8 +13,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 # 親ファイル
-_bot_config = os.path.abspath(os.path.join(os.path.dirname(__file__), "config", "discord.yml"))
-bot = TechUniDiscordBot(intents=intents, path_config_file=_bot_config)
+bot = TechUniDiscordBot(intents=intents)
 
 def run_flask(discord_appliers):
     TechUniDiscordBot.flask_applier = discord_appliers  # flaskスレッドにapplierQueueを追加
@@ -22,7 +21,7 @@ def run_flask(discord_appliers):
 
 def run_discord(discord_appliers):
     TechUniDiscordBot.flask_applier = discord_appliers  # DiscordスレッドにapplierQueueを追加
-    bot.run(os.environ.get("DISCORD_BOT_TOKEN"))
+    bot.run(str(os.environ.get("DISCORD_BOT_TOKEN")))
 
 if __name__ == "__main__":
     queue_discord_appliers = Queue()
