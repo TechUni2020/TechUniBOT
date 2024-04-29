@@ -1,6 +1,7 @@
 import os
 from flask import Blueprint, request, jsonify
 from techuni_object import JoinApplication
+from techuni_discord import TechUniDiscordBot
 
 app = Blueprint('app', __name__)
 
@@ -19,7 +20,7 @@ def receive_join_application():
         return jsonify(res='invalid sign'), 400
 
     # apply
-
+    TechUniDiscordBot.add_application(application)
     return jsonify(res='ok')
 
 @app.route('/test',methods=['GET'])
