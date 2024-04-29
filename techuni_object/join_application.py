@@ -93,4 +93,4 @@ class JoinApplication:
 
     def __str__(self):
         # 全項目列挙
-        return f"JoinApplication({self.id}, {self.applied_at}, {self.mail_address}, {self.name}, {self.school}, {self.department}, {self.grade}, {self.reason}, {self.opportunity}, {self.possible_dates})"
+        return f"JoinApplication({self.id}, {self.applied_at}, {self.mail_address}, {self.name}, {self.school}, {self.department}, {self.grade}, {self.opportunity}, {self.reason}, {self.goal}, {self.product})"
