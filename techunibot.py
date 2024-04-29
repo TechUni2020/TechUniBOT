@@ -27,6 +27,7 @@ def main():
     # process start
     discord_process.start()
 
+    return app
 
 if __name__ == "__main__":
-    main()
+    main().run()
