@@ -15,23 +15,19 @@ intents.message_content = True
 # 親ファイル
 bot = TechUniDiscordBot(intents=intents)
 
-def run_flask(discord_appliers):
-    TechUniDiscordBot.flask_applier = discord_appliers  # flaskスレッドにapplierQueueを追加
-    app.run()
-
 def run_discord(discord_appliers):
     TechUniDiscordBot.flask_applier = discord_appliers  # DiscordスレッドにapplierQueueを追加
     bot.run(str(os.environ.get("DISCORD_BOT_TOKEN")))
 
-if __name__ == "__main__":
+def main():
     queue_discord_appliers = Queue()
-    flask_process = Process(target=run_flask, args=(queue_discord_appliers,))
+    TechUniDiscordBot.flask_applier = queue_discord_appliers
     discord_process = Process(target=run_discord, args=(queue_discord_appliers,))
 
     # process start
-    flask_process.start()
     discord_process.start()
 
-    # process join(終了待ち)
-    flask_process.join()
-    discord_process.join()
+    return app
+
+if __name__ == "__main__":
+    main().run()
