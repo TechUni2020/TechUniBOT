@@ -29,5 +29,5 @@ def main():
 
     return app
 
-if __name__ == "__main__":
+if (os.environ.get("TECH_UNI_DEBUG") is not None) and (__name__ == "__main__"):
     main().run()
