@@ -1,6 +1,6 @@
 import discord
 import os
-from techuni_discord import TechUniDiscordBot
+from techuni import TechUniDiscordBot
 
 intents = discord.Intents.default()
 intents.members = True
