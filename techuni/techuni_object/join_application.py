@@ -84,6 +84,14 @@ class JoinApplication:
                 cls._appl_template = f.read()
         return cls._appl_template
 
+    @staticmethod
+    def from_socket(socket_input: str):
+        try:
+            return JoinApplication(json.loads(socket_input))
+        except json.JSONDecodeError:
+            return None
+
+
     def create_initial_message(self):
         mes = self.from_template()
         for attr in vars(self):

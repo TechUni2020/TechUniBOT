@@ -1,8 +1,11 @@
 import discord
 import os
+from discord.ext import tasks
+from multiprocessing import Queue
 from techuni import JoinApplication
 
 class TechUniDiscordBot(discord.Client):
+    flask_applier: Queue = None
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -43,3 +46,15 @@ class TechUniDiscordBot(discord.Client):
             allowed_mentions=discord.AllowedMentions(roles=True),
             reason=f"入会者フォーム回答({application.name} さん)"
         )
+
+    @classmethod
+    def add_application(cls, application: JoinApplication):
+        if cls.flask_applier is None:
+            raise ValueError("flask_applier is not set")
+        cls.flask_applier.put(application)
+
+    @tasks.loop(seconds=5)
+    async def checkForm(self):
+        while not self.flask_applier.empty():
+            application: JoinApplication = self.flask_applier.get()
+            await self.notify_application(application)
