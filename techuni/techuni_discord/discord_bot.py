@@ -1,6 +1,6 @@
 import discord
 import os
-from techuni_object import JoinApplication
+from techuni import JoinApplication
 
 class TechUniDiscordBot(discord.Client):
     def __init__(self, *args, **kwargs):
