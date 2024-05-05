@@ -27,9 +27,9 @@ class JoinApplication:
         self.name: str = ap["name"]
         # 学校
         self.school: str = ap["school"]
-        # 学部
+        # 学部系統
         self.major: str = ap["major"]
-        # 学年
+        # 卒業年度
         self.graduate_year: str = ap["graduate_year"]
         # 知ったきっかけ
         self.opportunity: str = ap["opportunity"]
