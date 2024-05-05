@@ -18,8 +18,14 @@ class SocketServer:
         while _data := await loop.sock_recv(client, 1024):
             data = _data.decode("utf-8")
             app = JoinApplication.from_socket(data)
+
+            if app is None:
+                await loop.sock_sendall(client, b"Invalid Data.")
+                print("Invalid Data.")
+                continue
+
             print(f"data = {str(app)}")
-            await loop.sock_sendall(client, _data)
+            await loop.sock_sendall(client, b"OK.")
         client.close()
 
     async def start(self):
