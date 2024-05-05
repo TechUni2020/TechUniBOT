@@ -15,18 +15,25 @@ class SocketServer:
         self._loop = None
 
     async def handle_client(self, client: socket.socket, loop: AbstractEventLoop):
-        while _data := await loop.sock_recv(client, 1024):
-            data = _data.decode("utf-8")
-            app = JoinApplication.from_socket(data)
+        try:
+            while _data := await loop.sock_recv(client, 1024):
+                data = _data.decode("utf-8")
+                app, error = JoinApplication.from_socket(data)
+                if app is None:
+                    await loop.sock_sendall(client, b"Invalid Data.")
+                    print("Invalid Data.", error.__class__.__name__, error)
+                    continue
 
-            if app is None:
-                await loop.sock_sendall(client, b"Invalid Data.")
-                print("Invalid Data.")
-                continue
+                print(f"data = {str(app)}")
+                await loop.sock_sendall(client, b"OK.")
 
-            print(f"data = {str(app)}")
-            await loop.sock_sendall(client, b"OK.")
-        client.close()
+        except (ConnectionError, BrokenPipeError, OSError) as e:
+            print(f"Error: {e}")
+        finally:
+            try:
+                client.close()
+            except Exception as e:
+                print(f"Close Error: {e}")
 
     async def start(self):
         self._loop = asyncio.get_event_loop()
