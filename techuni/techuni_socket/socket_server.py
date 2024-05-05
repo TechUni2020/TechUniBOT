@@ -1,7 +1,7 @@
 import asyncio
 import socket
 from asyncio.events import AbstractEventLoop
-from techuni import JoinApplication
+from techuni import JoinApplication, TechUniDiscordBot
 
 class SocketServer:
     def __init__(self, host: str, port: int):
@@ -24,6 +24,7 @@ class SocketServer:
                     print("Invalid Data.", error.__class__.__name__, error)
                     continue
 
+                TechUniDiscordBot.add_application(app)
                 print(f"data = {str(app)}")
                 await loop.sock_sendall(client, b"OK.")
 
