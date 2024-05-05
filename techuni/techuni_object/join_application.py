@@ -88,8 +88,8 @@ class JoinApplication:
     def from_socket(socket_input: str):
         try:
             return JoinApplication(json.loads(socket_input))
-        except json.JSONDecodeError:
-            return None
+        except Exception as e:
+            return None, e
 
 
     def create_initial_message(self):
