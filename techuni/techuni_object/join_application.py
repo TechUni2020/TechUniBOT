@@ -88,9 +88,9 @@ class JoinApplication:
         return cls._appl_template
 
     @staticmethod
-    def from_socket(socket_input: str):
+    def from_socket(socket_input: str) -> tuple["JoinApplication", None] | tuple[None, Exception]:
         try:
-            return JoinApplication(json.loads(socket_input))
+            return JoinApplication(json.loads(socket_input)), None
         except Exception as e:
             return None, e
 
