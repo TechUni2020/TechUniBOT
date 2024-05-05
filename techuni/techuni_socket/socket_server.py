@@ -1,5 +1,6 @@
 import asyncio
 import socket
+from asyncio.events import AbstractEventLoop
 from techuni import JoinApplication
 
 class SocketServer:
@@ -13,7 +14,7 @@ class SocketServer:
         self._soc.listen()
         self._loop = None
 
-    async def handle_client(self, client, loop):
+    async def handle_client(self, client: socket.socket, loop: AbstractEventLoop):
         while _data := await loop.sock_recv(client, 1024):
             data = _data.decode("utf-8")
             app = JoinApplication.from_socket(data)
