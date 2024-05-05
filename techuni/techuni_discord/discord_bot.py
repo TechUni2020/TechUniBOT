@@ -9,8 +9,8 @@ class TechUniDiscordBot(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.channel_join_appl = None
-        self.guild = None
+        self.channel_join_appl: discord.ForumChannel | None = None
+        self.guild: discord.Guild | None = None
 
     async def on_ready(self):
         print(f"Logged on as {self.user.name} ({self.user.id})")
