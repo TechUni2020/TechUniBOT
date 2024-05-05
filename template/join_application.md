@@ -11,10 +11,10 @@
 %%school%%
 
 *≪学部≫*
-%%department%%
+%%major%%
 
 *≪学年≫*
-%%grade%%
+%%graduate_year%%
 
 *≪Tech.Uniを知ったきっかけ≫*
 %%opportunity%%
@@ -27,3 +27,6 @@
 
 *≪作ってみたいプロダクト≫*
 %%product%%
+
+*≪やってほしいイベント≫*
+%%desired_event%%
