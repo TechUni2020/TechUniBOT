@@ -34,6 +34,7 @@ class TechUniDiscordBot(discord.Client):
         if not isinstance(self.channel_join_appl, discord.ForumChannel):
             raise ValueError(f"Channel({self.channel_join_appl.name}) is not ForumChannel(is {type(self.channel_join_appl)})")
 
+        self.checkForm.start()
         print("TechUniDiscordBot is ready.")
 
     async def on_message(self, message):
