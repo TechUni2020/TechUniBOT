@@ -1,13 +1,17 @@
 import discord
 import os
-from discord.ext import tasks
+from discord.ext import tasks, commands
 from multiprocessing import Queue
 from techuni import JoinApplication
 
-class TechUniDiscordBot(discord.Client):
+class TechUniDiscordBot(commands.Bot):
     flask_applier: Queue = None
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+
+    def __init__(self):
+        intents = discord.Intents.default()
+        intents.members = True
+        intents.message_content = True
+        super().__init__(intents=intents, command_prefix="/")
 
         self.channel_join_appl: discord.ForumChannel | None = None
         self.guild: discord.Guild | None = None

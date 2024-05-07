@@ -1,4 +1,3 @@
-import discord
 import os
 from techuni import TechUniDiscordBot, SocketServer
 import asyncio
@@ -13,10 +12,8 @@ def main():
     socket_queue = Queue()
     TechUniDiscordBot.flask_applier = socket_queue
 
-    intents = discord.Intents.default()
-    intents.members = True
-    intents.message_content = True
-    bot = TechUniDiscordBot(intents=intents)
+    # 親ファイル
+    bot = TechUniDiscordBot()
 
     socket_process = Process(target=socket_main, args=(socket_queue,))
     socket_process.start()
