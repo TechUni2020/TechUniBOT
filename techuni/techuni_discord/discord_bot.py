@@ -46,9 +46,6 @@ class TechUniDiscordBot(commands.Bot):
         self.checkForm.start()
         print("TechUniDiscordBot is ready.")
 
-    async def on_message(self, message):
-        pass
-
     async def notify_application(self, application: JoinApplication):
         await self.channel_join_appl.create_thread(
             name=application.name,
