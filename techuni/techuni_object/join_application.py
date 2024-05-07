@@ -9,7 +9,7 @@ import codecs
 class JoinApplication:
     _DATE_FORMAT = "%Y-%m-%d %H:%M:%S %z"
 
-    _appl_template_file = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "template", "join_application.md"))
+    _appl_template_file = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "template", "join_application.md"))
     _appl_template = None
     def __init__(self, data: dict):
         # ID
@@ -88,6 +88,14 @@ class JoinApplication:
             with codecs.open(cls._appl_template_file, "r", "utf-8") as f:
                 cls._appl_template = f.read()
         return cls._appl_template
+
+    @staticmethod
+    def from_socket(socket_input: str) -> tuple["JoinApplication", None] | tuple[None, Exception]:
+        try:
+            return JoinApplication(json.loads(socket_input)), None
+        except Exception as e:
+            return None, e
+
 
     def create_initial_message(self):
         mes = self.from_template()

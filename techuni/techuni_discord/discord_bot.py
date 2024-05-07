@@ -1,18 +1,20 @@
 import discord
 import os
-from discord.ext import commands
+from discord.ext import tasks, commands
+from multiprocessing import Queue
 from techuni import JoinApplication
 
 class TechUniDiscordBot(commands.Bot):
+    flask_applier: Queue = None
+
     def __init__(self):
         intents = discord.Intents.default()
         intents.members = True
         intents.message_content = True
-
         super().__init__(intents=intents, command_prefix="/")
 
-        self.channel_join_appl = None
-        self.guild = None
+        self.channel_join_appl: discord.ForumChannel | None = None
+        self.guild: discord.Guild | None = None
 
     async def on_ready(self):
         print(f"Logged on as {self.user.name} ({self.user.id})")
@@ -36,6 +38,7 @@ class TechUniDiscordBot(commands.Bot):
         if not isinstance(self.channel_join_appl, discord.ForumChannel):
             raise ValueError(f"Channel({self.channel_join_appl.name}) is not ForumChannel(is {type(self.channel_join_appl)})")
 
+        self.checkForm.start()
         print("TechUniDiscordBot is ready.")
 
     async def on_message(self, message):
@@ -48,3 +51,15 @@ class TechUniDiscordBot(commands.Bot):
             allowed_mentions=discord.AllowedMentions(roles=True),
             reason=f"入会者フォーム回答({application.name} さん)"
         )
+
+    @classmethod
+    def add_application(cls, application: JoinApplication):
+        if cls.flask_applier is None:
+            raise ValueError("flask_applier is not set")
+        cls.flask_applier.put(application)
+
+    @tasks.loop(seconds=5)
+    async def checkForm(self):
+        while not self.flask_applier.empty():
+            application: JoinApplication = self.flask_applier.get()
+            await self.notify_application(application)
