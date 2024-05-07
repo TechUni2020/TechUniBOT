@@ -3,6 +3,7 @@ import os
 from discord.ext import tasks, commands
 from multiprocessing import Queue
 from techuni import JoinApplication, JoinApplicationStatus
+from .commands import JoinApplicationCommand
 
 class TechUniDiscordBot(commands.Bot):
     flask_applier: Queue = None
@@ -44,6 +45,7 @@ class TechUniDiscordBot(commands.Bot):
             raise ValueError("Receive Tag is not found")
 
         self.checkForm.start()
+        await self.add_cog(JoinApplicationCommand(self))
         print("TechUniDiscordBot is ready.")
 
     async def notify_application(self, application: JoinApplication):
