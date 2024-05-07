@@ -1,7 +1,7 @@
 import discord
 import os
-from techuni import JoinApplication
 from discord.ext import commands
+from techuni import JoinApplication
 
 class TechUniDiscordBot(commands.Bot):
     def __init__(self):
