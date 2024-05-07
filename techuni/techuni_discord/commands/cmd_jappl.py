@@ -12,7 +12,7 @@ class JoinApplicationCommand(commands.Cog):
         pass
 
     @command_join_application.error
-    async def cja_error(self, ctx, error):
+    async def cja_error(self, ctx: commands.Context, error):
         if isinstance(error, commands.NoPrivateMessage):
             await ctx.send("このコマンドをDirect Messageで実行することはできません。")
         elif isinstance(error, OutOfTechUniGuildError):
