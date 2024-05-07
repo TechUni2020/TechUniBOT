@@ -3,8 +3,12 @@ import os
 from techuni import JoinApplication
 
 class TechUniDiscordBot(discord.Client):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self):
+        intents = discord.Intents.default()
+        intents.members = True
+        intents.message_content = True
+
+        super().__init__(intents=intents)
 
         self.channel_join_appl = None
         self.guild = None
