@@ -4,6 +4,7 @@ from discord.ext import tasks, commands
 from multiprocessing import Queue
 from techuni import JoinApplication, JoinApplicationStatus
 from .commands import JoinApplicationCommand
+from .view import JoinApplicationDecideView
 
 class TechUniDiscordBot(commands.Bot):
     flask_applier: Queue = None
@@ -46,7 +47,11 @@ class TechUniDiscordBot(commands.Bot):
 
         self.checkForm.start()
         await self.add_cog(JoinApplicationCommand(self))
+        JoinApplicationDecideView.FORUM_CHANNEL = self.channel_join_appl
         print("TechUniDiscordBot is ready.")
+
+    async def setup_hook(self):
+        self.add_view(JoinApplicationDecideView())
 
     async def on_command_error(self, ctx: commands.Context, error):
         if isinstance(error, commands.CheckFailure):
