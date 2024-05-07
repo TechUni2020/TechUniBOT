@@ -49,7 +49,9 @@ class TechUniDiscordBot(commands.Bot):
         print("TechUniDiscordBot is ready.")
 
     async def on_command_error(self, ctx: commands.Context, error):
-        if isinstance(error, commands.CommandNotFound):
+        if isinstance(error, commands.CheckFailure):
+            return
+        elif isinstance(error, commands.CommandNotFound):
             return
         raise error
 
