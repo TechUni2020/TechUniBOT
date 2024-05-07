@@ -12,7 +12,6 @@ def main():
     socket_queue = Queue()
     TechUniDiscordBot.flask_applier = socket_queue
 
-    # 親ファイル
     bot = TechUniDiscordBot()
 
     socket_process = Process(target=socket_main, args=(socket_queue,))
