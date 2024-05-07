@@ -48,6 +48,11 @@ class TechUniDiscordBot(commands.Bot):
         await self.add_cog(JoinApplicationCommand(self))
         print("TechUniDiscordBot is ready.")
 
+    async def on_command_error(self, ctx: commands.Context, error):
+        if isinstance(error, commands.CommandNotFound):
+            return
+        raise error
+
     async def notify_application(self, application: JoinApplication):
         await self.channel_join_appl.create_thread(
             name=application.name,
