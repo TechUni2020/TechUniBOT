@@ -2,7 +2,7 @@ import discord
 import os
 from discord.ext import tasks, commands
 from multiprocessing import Queue
-from techuni import JoinApplication
+from techuni import JoinApplication, JoinApplicationStatus
 
 class TechUniDiscordBot(commands.Bot):
     flask_applier: Queue = None
@@ -15,6 +15,7 @@ class TechUniDiscordBot(commands.Bot):
 
         self.channel_join_appl: discord.ForumChannel | None = None
         self.guild: discord.Guild | None = None
+        self.tag_appl_receive: discord.ForumTag | None = None
 
     async def on_ready(self):
         print(f"Logged on as {self.user.name} ({self.user.id})")
@@ -38,6 +39,10 @@ class TechUniDiscordBot(commands.Bot):
         if not isinstance(self.channel_join_appl, discord.ForumChannel):
             raise ValueError(f"Channel({self.channel_join_appl.name}) is not ForumChannel(is {type(self.channel_join_appl)})")
 
+        self.tag_appl_receive = JoinApplicationStatus.RECEIVE.get_tag(self.channel_join_appl)
+        if self.tag_appl_receive is None:
+            raise ValueError("Receive Tag is not found")
+
         self.checkForm.start()
         print("TechUniDiscordBot is ready.")
 
@@ -49,6 +54,7 @@ class TechUniDiscordBot(commands.Bot):
             name=application.name,
             content=application.create_initial_message(),
             allowed_mentions=discord.AllowedMentions(roles=True),
+            applied_tags=[self.tag_appl_receive],
             reason=f"入会者フォーム回答({application.name} さん)"
         )
 
