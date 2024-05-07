@@ -1,14 +1,15 @@
 import discord
 import os
 from techuni import JoinApplication
+from discord.ext import commands
 
-class TechUniDiscordBot(discord.Client):
+class TechUniDiscordBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
         intents.members = True
         intents.message_content = True
 
-        super().__init__(intents=intents)
+        super().__init__(intents=intents, command_prefix="/")
 
         self.channel_join_appl = None
         self.guild = None
