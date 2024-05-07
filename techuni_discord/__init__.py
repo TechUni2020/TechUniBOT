@@ -1,0 +1,1 @@
+from techuni_discord.discord_bot import TechUniDiscordBot
