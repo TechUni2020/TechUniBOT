@@ -75,9 +75,11 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
         )
 
     # 受理・却下ボタン(View)削除
-    first_message = await thread.fetch_message(thread.id)
-    if first_message is not None:
+    try:
+        first_message = await thread.fetch_message(thread.id)  # is not None (ないときはNotFound例外)
         await first_message.edit(view=None)
+    except discord.NotFound:
+        pass
 
 async def _interaction_check(interaction: discord.Interaction) -> tuple[bool, discord.Thread | None, discord.ForumChannel | None]:
     thread = interaction.channel
