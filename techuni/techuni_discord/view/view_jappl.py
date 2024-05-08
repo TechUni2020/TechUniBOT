@@ -5,6 +5,7 @@ from techuni.techuni_object.join_application_status import JoinApplicationStatus
 class JoinApplicationDecideView(discord.ui.View):
     FORUM_CHANNEL: discord.ForumChannel = None
     CONFIRM_TIMEOUT = 60
+    INVITE_FUNCTION = None
 
     def __init__(self):
         super().__init__(timeout=None)
@@ -53,18 +54,30 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
         return
 
     await thread.remove_tags(JoinApplicationStatus.RECEIVE.get_tag(forum_channel), reason="[フラグ削除 - 審査中] 入会申請の審査完了")
+
     if status:
         await thread.add_tags(JoinApplicationStatus.INVITE.get_tag(forum_channel), reason="[フラグ追加 - 完了(受理)] 入会申請の受理")
         await thread.send(
             "この入会申請は受理されました。(実行者：{0})".format(interaction.user.mention),
             allowed_mentions=discord.AllowedMentions(users=True)
         )
+        link: discord.Invite = await JoinApplicationDecideView.INVITE_FUNCTION(thread.name)
+        await thread.send(
+            "招待リンク： ||{0}||".format(link.url),  # markdownのスポイラー(||)で目隠しして送信
+            suppress_embeds=True  # 招待リンクの埋め込みを表示しない
+        )
+
     else:
         await thread.add_tags(JoinApplicationStatus.REJECT.get_tag(forum_channel), reason="[フラグ追加 - 完了(却下)] 入会申請の却下")
         await thread.send(
             "この入会申請は却下されました。(実行者：{0})".format(interaction.user.mention),
             allowed_mentions=discord.AllowedMentions(users=True)
         )
+
+    # 受理・却下ボタン(View)削除
+    first_message = await thread.fetch_message(thread.id)
+    if first_message is not None:
+        await first_message.edit(view=None)
 
 async def _interaction_check(interaction: discord.Interaction) -> tuple[bool, discord.Thread | None, discord.ForumChannel | None]:
     thread = interaction.channel
