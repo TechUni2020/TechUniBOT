@@ -9,11 +9,11 @@ import codecs
 class JoinApplication:
     _DATE_FORMAT = "%Y-%m-%d %H:%M:%S %z"
 
-    _appl_template_file = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "template", "join_application.md"))
+    _appl_template_file = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "template", "join_application.md"))
     _appl_template = None
     def __init__(self, data: dict):
         # ID
-        self.id: str = data["ID"]
+        self.id: str = data["id"]
         # 申請日時 ex) data内は、2024-01-01 01:11:11 +0900
         self.applied_at: datetime = (
             datetime.strptime(data["applied_at"], self._DATE_FORMAT)
@@ -27,10 +27,10 @@ class JoinApplication:
         self.name: str = ap["name"]
         # 学校
         self.school: str = ap["school"]
-        # 学部
-        self.department: str = ap["department"]
-        # 学年
-        self.grade: str = ap["grade"]
+        # 学部系統
+        self.major: str = ap["major"]
+        # 卒業年度
+        self.graduate_year: str = ap["graduate_year"]
         # 知ったきっかけ
         self.opportunity: str = ap["opportunity"]
 
@@ -42,6 +42,8 @@ class JoinApplication:
         self.goal: str = det["goal"]
         # 作りたいプロダクト
         self.product: str = det["product"]
+        # やってほしいイベント
+        self.desired_event: str = det["desired_event"]
 
     @staticmethod
     def from_webhook(data: dict, key: str):
@@ -60,29 +62,40 @@ class JoinApplication:
 
     def to_dict(self):
         return {
-            "ID": self.id,
+            "id": self.id,
             "applied_at": self.applied_at.strftime(self._DATE_FORMAT),
             "mail_address": self.mail_address,
             "applier": {
                 "name": self.name,
                 "school": self.school,
-                "department": self.department,
-                "grade": self.grade,
+                "major": self.major,
+                "graduate_year": self.graduate_year,
                 "opportunity": self.opportunity
             },
             "details": {
                 "reason": self.reason,
                 "goal": self.goal,
-                "product": self.product
+                "product": self.product,
+                "desired_event": self.desired_event
             }
         }
 
     @classmethod
     def from_template(cls) -> str:
         if cls._appl_template is None:
+            if not os.path.exists(cls._appl_template_file):
+                raise FileNotFoundError(f"Template file({cls._appl_template_file}) is not found")
             with codecs.open(cls._appl_template_file, "r", "utf-8") as f:
                 cls._appl_template = f.read()
         return cls._appl_template
+
+    @staticmethod
+    def from_socket(socket_input: str) -> tuple["JoinApplication", None] | tuple[None, Exception]:
+        try:
+            return JoinApplication(json.loads(socket_input)), None
+        except Exception as e:
+            return None, e
+
 
     def create_initial_message(self):
         mes = self.from_template()
@@ -93,4 +106,4 @@ class JoinApplication:
 
     def __str__(self):
         # 全項目列挙
-        return f"JoinApplication({self.id}, {self.applied_at}, {self.mail_address}, {self.name}, {self.school}, {self.department}, {self.grade}, {self.opportunity}, {self.reason}, {self.goal}, {self.product})"
+        return f"JoinApplication({self.id}, {self.applied_at}, {self.mail_address}, {self.name}, {self.school}, {self.major}, {self.graduate_year}, {self.opportunity}, {self.reason}, {self.goal}, {self.product}, {self.desired_event})"

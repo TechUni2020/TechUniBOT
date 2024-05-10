@@ -1,1 +1,0 @@
-from techuni_object.join_application import JoinApplication
