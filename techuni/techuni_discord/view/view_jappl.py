@@ -44,7 +44,7 @@ class JoinApplicationDecideView(discord.ui.View):
             if confirm_view.value:
                 await set_application_status(interaction, value)
             else:
-                await interaction.followup.send_message("キャンセルしました。", ephemeral=True)
+                await interaction.followup.send("キャンセルしました。", ephemeral=True)
         self.stop()
 
 async def set_application_status(interaction: discord.Interaction, status: bool):
