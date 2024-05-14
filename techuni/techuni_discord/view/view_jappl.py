@@ -17,8 +17,8 @@ class JoinApplicationDecideView(discord.ui.View):
             await interaction.response.send_message("この申請は審査中ではありません。", ephemeral=True, delete_after=30)
             return
 
-        await self._run(interaction, True)
-        self.stop()
+        if await self._run(interaction, True):
+            self.stop()
 
     @discord.ui.button(label="却下する", style=discord.ButtonStyle.red, custom_id="jappl_decide:reject")
     async def reject(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -27,10 +27,10 @@ class JoinApplicationDecideView(discord.ui.View):
             await interaction.response.send_message("この申請は審査中ではありません。", ephemeral=True, delete_after=30)
             return
 
-        await self._run(interaction, False)
-        self.stop()
+        if await self._run(interaction, False):
+            self.stop()
 
-    async def _run(self, interaction: discord.Interaction, value: bool):
+    async def _run(self, interaction: discord.Interaction, value: bool) -> bool:
         confirm_view = ConfirmView(timeout=self.CONFIRM_TIMEOUT)
         await interaction.response.send_message(
             "この入会申請を{0}しますか？".format("受理" if value else "却下"),
@@ -40,18 +40,18 @@ class JoinApplicationDecideView(discord.ui.View):
         )
         await confirm_view.wait()
 
+        interaction_stop = False
         if confirm_view.value is not None:  # -> if not timeout
             if confirm_view.value:
-                await set_application_status(interaction, value)
-            else:
-                await interaction.followup.send("キャンセルしました。", ephemeral=True)
-        self.stop()
+                interaction_stop = await set_application_status(interaction, value)
+        return interaction_stop
 
-async def set_application_status(interaction: discord.Interaction, status: bool):
+async def set_application_status(interaction: discord.Interaction, status: bool) -> bool:
+    # response is already used
     is_valid, thread, forum_channel = await _interaction_check(interaction)
     if not is_valid:
-        await interaction.response.send_message("この申請は審査中ではありません。", ephemeral=True, timeout=30)
-        return
+        await interaction.followup.send("この申請は審査中ではありません。", ephemeral=True, timeout=30)
+        return False
 
     await thread.remove_tags(JoinApplicationStatus.RECEIVE.get_tag(forum_channel), reason="[フラグ削除 - 審査中] 入会申請の審査完了")
 
@@ -80,6 +80,8 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
         await first_message.edit(view=None)
     except discord.NotFound:
         pass
+
+    return True
 
 async def _interaction_check(interaction: discord.Interaction) -> tuple[bool, discord.Thread | None, discord.ForumChannel | None]:
     thread = interaction.channel
