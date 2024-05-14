@@ -6,7 +6,6 @@ class JoinApplicationStatus(Enum):
     RECEIVE = auto(),
     INVITE = auto(),
     REJECT = auto(),
-    COMPLETE = auto(),
 
     def __init__(self, _id):
         self.id = _id
