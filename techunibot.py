@@ -1,7 +1,7 @@
 import os
-from techuni import TechUniDiscordBot, SocketServer
 import asyncio
 from multiprocessing import Process, Queue
+from techuni import TechUniDiscordBot, SocketServer
 
 def socket_main(queue):
     TechUniDiscordBot.flask_applier = queue
