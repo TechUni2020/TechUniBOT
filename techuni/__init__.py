@@ -2,3 +2,4 @@
 from .techuni_object import JoinApplication, JoinApplicationStatus
 from .techuni_discord import TechUniDiscordBot
 from .techuni_socket import SocketServer
+from .util import *

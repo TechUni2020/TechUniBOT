@@ -1,15 +1,16 @@
-from datetime import datetime
 import base64
 import json
 import hmac
 import hashlib
 import os
 import codecs
+from datetime import datetime
+from techuni.util import multi_dirname
 
 class JoinApplication:
     _DATE_FORMAT = "%Y-%m-%d %H:%M:%S %z"
 
-    _appl_template_file = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "template", "join_application.md"))
+    _appl_template_file = os.path.join(multi_dirname(__file__, 3), "template", "join_application.md")
     _appl_template = None
     def __init__(self, data: dict):
         # ID
