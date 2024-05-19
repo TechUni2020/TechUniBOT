@@ -2,7 +2,7 @@
 
 ## 使用技術
 - Python: 3.12.x
-- [discord.py](https://github.com/Rapptz/discord.py): latest
+- [discord.py](https://github.com/Rapptz/discord.py)
 - [Pipenv](https://github.com/pypa/pipenv) (for package management)
 
 ## セットアップ
