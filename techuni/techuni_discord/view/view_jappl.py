@@ -82,6 +82,9 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
     except discord.NotFound:
         pass
 
+    # スレッドのロック・クローズ処理
+    await thread.edit(archived=True, locked=True)
+
     return True
 
 async def _interaction_check(interaction: discord.Interaction) -> tuple[bool, discord.Thread | None, discord.ForumChannel | None]:
