@@ -53,10 +53,8 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
         await interaction.followup.send("この申請は審査中ではありません。", ephemeral=True, timeout=30)
         return False
 
-    await thread.remove_tags(JoinApplicationStatus.RECEIVE.get_tag(forum_channel), reason="[フラグ削除 - 審査中] 入会申請の審査完了")
-
     if status:
-        await thread.add_tags(JoinApplicationStatus.INVITE.get_tag(forum_channel), reason="[フラグ追加 - 完了(受理)] 入会申請の受理")
+        new_tag_info = [JoinApplicationStatus.INVITE.get_tag(forum_channel)], "[フラグ設定] 入会申請の受理"
         await thread.send(
             "この入会申請は受理されました。(実行者：{0})".format(interaction.user.mention),
             allowed_mentions=discord.AllowedMentions(users=True)
@@ -68,11 +66,14 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
         )
 
     else:
-        await thread.add_tags(JoinApplicationStatus.REJECT.get_tag(forum_channel), reason="[フラグ追加 - 完了(却下)] 入会申請の却下")
+        new_tag_info = [JoinApplicationStatus.REJECT.get_tag(forum_channel)], "[フラグ設定] 入会申請の却下"
         await thread.send(
             "この入会申請は却下されました。(実行者：{0})".format(interaction.user.mention),
             allowed_mentions=discord.AllowedMentions(users=True)
         )
+
+    # タグ設定
+    await thread.edit(applied_tags=new_tag_info[0], reason=new_tag_info[1])
 
     # 受理・却下ボタン(View)削除
     try:
