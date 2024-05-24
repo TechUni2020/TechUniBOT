@@ -1,5 +1,9 @@
 # Discord Bot for Tech.Uni
 
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
 ## 使用技術
 - Python: 3.12.x
 - [discord.py](https://github.com/Rapptz/discord.py)
@@ -37,3 +41,21 @@ Python 3.12.x がインストールされていない場合でも、①でPyenv�
 pipenv install
 ```
 以上で、セットアップは完了です。
+
+## Contributors ✨
+
+Thanks goes to these wonderful people!!
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/KO1231"><img src="https://github.com/TechUni2020/TechUniBOT/assets/124903312/d3317ef0-f926-42b3-9643-dc79f7e3711b" width="100px;" alt=""/><br /><sub><b>岡 和寛</b></sub></a>
+    <td align="center"><a href="https://github.com/gohan5858"><img src="" width="100px;" alt=""/><br /><sub><b>足立 里空</b></sub></a>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
