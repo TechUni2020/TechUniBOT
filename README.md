@@ -8,7 +8,7 @@
 ![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/TechUni2020/TechUniBOT/discord.py)
 
 ## 使用技術
-- Python: 3.12.x
+- [Python](https://www.python.org/)
 - [discord.py](https://github.com/Rapptz/discord.py)
 - [Pipenv](https://github.com/pypa/pipenv) (for package management)
 
