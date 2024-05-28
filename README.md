@@ -1,8 +1,11 @@
 # Discord Bot for Tech.Uni
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=master&label=build%20(master))
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=develop&label=build%20(develop))
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/TechUni2020/TechUniBOT)
+![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/TechUni2020/TechUniBOT/discord.py)
 
 ## 使用技術
 - Python: 3.12.x
