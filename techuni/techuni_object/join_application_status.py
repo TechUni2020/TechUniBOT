@@ -8,10 +8,10 @@ class JoinApplicationStatus(Enum):
     INVITE = (auto(), EmailTemplate.INVITE),
     REJECT = (auto(), None),
 
-    def __init__(self, _id, email_template: EmailTemplate):
-        self.id = _id
+    def __init__(self, args):
+        self.id = args[0]
         self._tag_id = None
-        self._email_template = email_template
+        self._email_template = args[1]
 
     def get_tag(self, channel: ForumChannel):
         if channel is None:
