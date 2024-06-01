@@ -2,9 +2,9 @@ import discord
 import os
 from discord.ext import tasks, commands
 from multiprocessing import Queue
-from techuni import JoinApplication, JoinApplicationStatus
-from .commands import JoinApplicationCommand
-from .view import JoinApplicationDecideView
+from techuni.techuni_object import JoinApplication, JoinApplicationStatus
+from techuni.techuni_discord.commands import JoinApplicationCommand
+from techuni.techuni_discord.view import JoinApplicationDecideView
 
 class TechUniDiscordBot(commands.Bot):
     flask_applier: Queue = None

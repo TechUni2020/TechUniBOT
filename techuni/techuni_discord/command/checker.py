@@ -1,6 +1,6 @@
 import os
 from discord.ext import commands
-from .check_error import OutOfTechUniGuildError
+from techuni.techuni_discord.command.check_error import OutOfTechUniGuildError
 
 _GID = None
 def check_guild(ctx: commands.Context):
