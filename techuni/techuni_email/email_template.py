@@ -25,8 +25,10 @@ class EmailTemplate(Enum):
         # テンプレート情報をymlから読み込む
         with open(self._get_path_info(), "r") as f:
             _info = safe_load(f)
-            self.subtypes = set(_info["subtype"])  # Content-Typeの一覧
         self.subject = str(_info["subject"])  # メールの主題
+        self.subtypes = set(_info.get("subtype", []))  # Content-Typeの一覧 keyがない場合、空
+        if "plain" not in self.subtypes:
+            self.subtypes.add("plain")
 
     def _load_template(self):
         for content_type in self.subtypes:
