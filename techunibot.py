@@ -1,7 +1,7 @@
 import os
 import asyncio
 from multiprocessing import Process, Queue
-from techuni import TechUniDiscordBot, SocketServer
+from techuni import TechUniDiscordBot, SocketServer, EmailTemplate
 
 def socket_main(queue):
     TechUniDiscordBot.flask_applier = queue
@@ -16,6 +16,8 @@ def main():
 
     socket_process = Process(target=socket_main, args=(socket_queue,))
     socket_process.start()
+
+    EmailTemplate.load()
 
     bot.run(str(os.environ.get("DISCORD_BOT_TOKEN")))
 
