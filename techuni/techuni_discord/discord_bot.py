@@ -110,4 +110,6 @@ class TechUniDiscordBot(commands.Bot):
     async def check_receive_application(self):
         while not self.socket_applier.empty():
             application: JoinApplication = self.socket_applier.get()
-            await self.create_application_thread(application)
+            thread = await self.create_application_thread(application)
+            self.email_controller.send_joinapplication(application, JoinApplicationStatus.RECEIVE)
+            await thread.send(f"[メール送信] 入会申請受付メールを送信しました。")
