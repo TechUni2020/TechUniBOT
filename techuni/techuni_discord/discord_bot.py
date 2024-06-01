@@ -2,6 +2,7 @@ import discord
 import os
 from discord.ext import tasks, commands
 from multiprocessing import Queue
+from techuni.techuni_email import EmailController
 from techuni.techuni_object import JoinApplication, JoinApplicationStatus
 from techuni.techuni_discord.commands import JoinApplicationCommand
 from techuni.techuni_discord.view import JoinApplicationDecideView
@@ -9,7 +10,9 @@ from techuni.techuni_discord.view import JoinApplicationDecideView
 class TechUniDiscordBot(commands.Bot):
     socket_applier: Queue = None
 
-    def __init__(self):
+    def __init__(self, email_controller: EmailController):
+        self.email_controller = email_controller
+
         intents = discord.Intents.default()
         intents.members = True
         intents.message_content = True
