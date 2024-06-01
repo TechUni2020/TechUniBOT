@@ -87,15 +87,15 @@ class TechUniDiscordBot(commands.Bot):
         )
         return invite
 
-    async def notify_application(self, application: JoinApplication):
-        await self.channel_join_appl.create_thread(
+    async def create_application_thread(self, application: JoinApplication) -> discord.Thread:
+        return (await self.channel_join_appl.create_thread(
             name=application.name,
             content=application.create_initial_message(),
             view=JoinApplicationDecideView(),
             allowed_mentions=discord.AllowedMentions(roles=True),
             applied_tags=[self.tag_appl_receive],
             reason=f"入会者フォーム回答({application.name} さん)"
-        )
+        )).thread
 
     @classmethod
     def add_application(cls, application: JoinApplication):
@@ -107,4 +107,4 @@ class TechUniDiscordBot(commands.Bot):
     async def check_receive_application(self):
         while not self.socket_applier.empty():
             application: JoinApplication = self.socket_applier.get()
-            await self.notify_application(application)
+            await self.create_application_thread(application)
