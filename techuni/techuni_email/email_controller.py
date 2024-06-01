@@ -3,6 +3,7 @@ import imaplib
 import email.utils
 from email.message import EmailMessage
 from techuni.techuni_email import EmailTemplate, EmailClientManager
+from techuni.techuni_object import JoinApplication, JoinApplicationStatus
 
 class EmailController:
     def __init__(self, client_manager: EmailClientManager):
@@ -35,6 +36,21 @@ class EmailController:
             msg.as_string().encode("utf-8")
         )
 
+        return msg
+
+    def send_joinapplication(self, application: JoinApplication, status: JoinApplicationStatus, additional_args: dict | None = None):
+        if not status.need_send_email():
+            raise ValueError(f"Email is not needed. ({status.name})")
+        template = status.get_email_template()
+
+        args = {}
+        for attr in vars(application):
+            args[attr] = str(getattr(application, attr))
+
+        if additional_args is not None:
+            args |= additional_args
+
+        msg = self.send(template, application.mail_address, args)
         return msg
 
     @staticmethod
