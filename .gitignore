@@ -1,2 +1,5 @@
 **/__pycache__/*
 .python-version
+
+email_clients/*
+!email_clients/test_techuni_org.yml
