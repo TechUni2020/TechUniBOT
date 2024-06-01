@@ -1,0 +1,6 @@
+from: ""
+subject: ""
+
+# text/plain(.txt)は絶対に含む。それ以外、multipart/alternativeで送信する場合。
+#subtype:
+# - "html"
