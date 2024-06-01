@@ -18,15 +18,15 @@ class EmailTemplate(Enum):
         self.is_init = False
 
         self.templates = {}
-        self.title: str
+        self.subject: str
         self.subtypes: set
 
     def _load_info(self):
         # テンプレート情報をymlから読み込む
         with open(self._get_path_info(), "r") as f:
             _info = safe_load(f)
-            self.title = str(_info["title"])  # メールの主題
             self.subtypes = set(_info["subtype"])  # Content-Typeの一覧
+        self.subject = str(_info["subject"])  # メールの主題
 
     def _load_template(self):
         for content_type in self.subtypes:
