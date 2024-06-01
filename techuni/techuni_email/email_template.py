@@ -6,7 +6,7 @@ from techuni.util import multi_dirname
 _TEMPLATE_DIR: str = os.path.join(multi_dirname(__file__, 3), "template", "mail")
 _TYPE_EXTENSION = {
     "html": "html",
-    "text": "txt"
+    "plain": "txt"
 }
 
 class EmailTemplate(Enum):
