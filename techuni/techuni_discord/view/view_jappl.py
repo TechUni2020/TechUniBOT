@@ -1,6 +1,6 @@
 import discord
 from .view import ConfirmView
-from techuni.techuni_object.join_application_status import JoinApplicationStatus
+from techuni.techuni_object import JoinApplicationStatus
 
 class JoinApplicationDecideView(discord.ui.View):
     FORUM_CHANNEL: discord.ForumChannel = None

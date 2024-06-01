@@ -1,7 +1,9 @@
 import os
 import asyncio
 from multiprocessing import Process, Queue
-from techuni import TechUniDiscordBot, SocketServer, EmailTemplate
+from techuni.techuni_discord import TechUniDiscordBot
+from techuni.techuni_socket import SocketServer
+from techuni.techuni_email import EmailTemplate
 
 def socket_main(queue):
     TechUniDiscordBot.flask_applier = queue
