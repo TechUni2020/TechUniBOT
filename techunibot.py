@@ -6,13 +6,13 @@ from techuni.techuni_socket import SocketServer
 from techuni.techuni_email import EmailTemplate
 
 def socket_main(queue):
-    TechUniDiscordBot.flask_applier = queue
+    TechUniDiscordBot.socket_applier = queue
     socket_s = SocketServer("localhost", int(os.environ.get("SOCKET_PORT")))
     asyncio.run(socket_s.start())
 
 def main():
     socket_queue = Queue()
-    TechUniDiscordBot.flask_applier = socket_queue
+    TechUniDiscordBot.socket_applier = socket_queue
 
     bot = TechUniDiscordBot()
 
