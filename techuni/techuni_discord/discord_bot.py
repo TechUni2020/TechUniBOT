@@ -55,7 +55,7 @@ class TechUniDiscordBot(commands.Bot):
         if self.tag_appl_receive is None:
             raise ValueError("Receive Tag is not found")
 
-        self.checkForm.start()
+        self.check_receive_application.start()
         await self.add_cog(JoinApplicationCommand(self))
         JoinApplicationDecideView.FORUM_CHANNEL = self.channel_join_appl
         JoinApplicationDecideView.INVITE_FUNCTION = self.create_personal_invite
@@ -104,7 +104,7 @@ class TechUniDiscordBot(commands.Bot):
         cls.socket_applier.put(application)
 
     @tasks.loop(seconds=5)
-    async def checkForm(self):
+    async def check_receive_application(self):
         while not self.socket_applier.empty():
             application: JoinApplication = self.socket_applier.get()
             await self.notify_application(application)
