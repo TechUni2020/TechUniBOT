@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from techuni.techuni_discord import TechUniDiscordBot
 from techuni.techuni_socket import SocketServer
+from techuni.techuni_email import EmailTemplate, EmailClientManager, EmailController
 from techuni.techuni_database.schema import JoinApplicationTable
 from techuni.techuni_database import DatabaseSession
 
@@ -27,8 +28,13 @@ def main():
     socket_queue = Queue()
     TechUniDiscordBot.socket_applier = socket_queue
 
+    # Email
+    EmailTemplate.load()
+    client_manager = EmailClientManager()
+    email_controller = EmailController(client_manager)
+
     # Discord BOT
-    bot = TechUniDiscordBot(database_session)
+    bot = TechUniDiscordBot(email_controller, database_session)
 
     # --- Process Start --- #
     # Socket
@@ -40,6 +46,7 @@ def main():
 
     socket_process.join()
     database_session.close()
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,6 @@
+from: "test@techuni.org"
+subject: "THIS IS EXAMPLE INVITE MAIL."
+
+# text/plain(.txt)は絶対に含む。それ以外、multipart/alternativeでhtmlを送信する場合。
+subtype:
+ - "html"

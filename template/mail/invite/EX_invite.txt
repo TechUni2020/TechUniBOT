@@ -1,0 +1,3 @@
+THIS IS EXAMPLE INVITE MAIL.
+
+%%name%%さん あなたを招待します。%%invite_url%%

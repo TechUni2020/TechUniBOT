@@ -2,6 +2,7 @@ import discord
 import os
 from discord.ext import tasks, commands
 from multiprocessing import Queue
+from techuni.techuni_email import EmailController
 from techuni.techuni_object import JoinApplication, JoinApplicationStatus
 from techuni.techuni_discord.commands import JoinApplicationCommand
 from techuni.techuni_discord.view import JoinApplicationDecideView
@@ -10,7 +11,8 @@ from techuni.techuni_database import DatabaseSession
 class TechUniDiscordBot(commands.Bot):
     socket_applier: Queue = None
 
-    def __init__(self, database_session: DatabaseSession):
+    def __init__(self, email_controller: EmailController, database_session: DatabaseSession):
+        self.email_controller = email_controller
         self.database_session = database_session
 
         intents = discord.Intents.default()
@@ -62,6 +64,7 @@ class TechUniDiscordBot(commands.Bot):
         await self.add_cog(JoinApplicationCommand(self))
         JoinApplicationDecideView.FORUM_CHANNEL = self.channel_join_appl
         JoinApplicationDecideView.INVITE_FUNCTION = self.create_personal_invite
+        JoinApplicationDecideView.SEND_EMAIL_FUNCTION = self.email_controller.send
         JoinApplicationDecideView.DATABASE_SESSION = self.database_session
         print("TechUniDiscordBot is ready.")
 
@@ -91,7 +94,7 @@ class TechUniDiscordBot(commands.Bot):
         )
         return invite
 
-    async def notify_application(self, application: JoinApplication):
+    async def create_application_thread(self, application: JoinApplication) -> discord.Thread:
         thread = (await self.channel_join_appl.create_thread(
             name=application.name,
             content=application.create_initial_message(),
@@ -103,6 +106,7 @@ class TechUniDiscordBot(commands.Bot):
 
         # add database
         self.database_session.add_application(application, thread.id)
+        return thread
 
     @classmethod
     def add_application(cls, application: JoinApplication):
@@ -114,4 +118,11 @@ class TechUniDiscordBot(commands.Bot):
     async def check_receive_application(self):
         while not self.socket_applier.empty():
             application: JoinApplication = self.socket_applier.get()
-            await self.notify_application(application)
+            thread = await self.create_application_thread(application)
+
+            self.email_controller.send(
+                JoinApplicationStatus.RECEIVE.get_email_template(),
+                application.mail_address,
+                {"name": application.name}  # RECEIVE内で使用可能な変数
+            )
+            await thread.send(f"[メール送信] 入会申請受付メールを送信しました。")

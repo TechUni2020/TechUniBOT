@@ -1,0 +1,21 @@
+address: "test@techuni.org"
+name: "TEST FILE"
+organization: "Tech.Uni"
+
+imap:
+  host: ""
+  port: 0
+  ssl: "SSL/TLS or STARTTLS or NONE"
+  user: ""
+  password: ""
+  ROOT: ""
+
+smtp:
+    host: ""
+    port: 0
+    ssl: "SSL/TLS or STARTTLS or NONE"
+    user: ""
+    password: ""
+
+# --- TEST(Example)用 このファイルはTESTによりloadされない。---
+TEST: true

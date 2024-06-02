@@ -5,6 +5,7 @@ from sqlalchemy.dialects.mysql import TEXT, BIGINT
 
 Base = declarative_base()
 
+
 class JoinApplicationTable(Base):
     __tablename__ = "join_application"
 
