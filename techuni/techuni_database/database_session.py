@@ -1,5 +1,5 @@
 from techuni.techuni_object import JoinApplication
-from techuni.techuni_database.model import JoinApplicationTable
+from techuni.techuni_database.schema import JoinApplicationTable
 
 
 class DatabaseSession:
