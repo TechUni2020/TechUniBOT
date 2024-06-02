@@ -6,6 +6,7 @@ class JoinApplicationDecideView(discord.ui.View):
     FORUM_CHANNEL: discord.ForumChannel = None
     CONFIRM_TIMEOUT = 60
     INVITE_FUNCTION = None
+    DATABASE_SESSION = None
 
     def __init__(self):
         super().__init__(timeout=None)
@@ -84,6 +85,8 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
 
     # スレッドのロック・クローズ処理
     await thread.edit(archived=True, locked=True)
+
+    JoinApplicationDecideView.DATABASE_SESSION.delete_application_by_thread(thread.id)
 
     return True
 
