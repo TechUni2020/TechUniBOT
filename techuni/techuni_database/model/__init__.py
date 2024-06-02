@@ -1,1 +1,0 @@
-from .join_application_table import JoinApplicationTable

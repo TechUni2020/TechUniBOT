@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from techuni.techuni_discord import TechUniDiscordBot
 from techuni.techuni_socket import SocketServer
-from techuni.techuni_database.model import JoinApplicationTable
+from techuni.techuni_database.schema import JoinApplicationTable
 from techuni.techuni_database import DatabaseSession
 
 def socket_main(queue):
