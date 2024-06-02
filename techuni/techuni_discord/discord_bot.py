@@ -5,11 +5,14 @@ from multiprocessing import Queue
 from techuni.techuni_object import JoinApplication, JoinApplicationStatus
 from techuni.techuni_discord.commands import JoinApplicationCommand
 from techuni.techuni_discord.view import JoinApplicationDecideView
+from techuni.techuni_database import DatabaseSession
 
 class TechUniDiscordBot(commands.Bot):
     socket_applier: Queue = None
 
-    def __init__(self):
+    def __init__(self, database_session: DatabaseSession):
+        self.database_session = database_session
+
         intents = discord.Intents.default()
         intents.members = True
         intents.message_content = True
@@ -59,6 +62,7 @@ class TechUniDiscordBot(commands.Bot):
         await self.add_cog(JoinApplicationCommand(self))
         JoinApplicationDecideView.FORUM_CHANNEL = self.channel_join_appl
         JoinApplicationDecideView.INVITE_FUNCTION = self.create_personal_invite
+        JoinApplicationDecideView.DATABASE_SESSION = self.database_session
         print("TechUniDiscordBot is ready.")
 
     async def setup_hook(self):
@@ -88,14 +92,17 @@ class TechUniDiscordBot(commands.Bot):
         return invite
 
     async def notify_application(self, application: JoinApplication):
-        await self.channel_join_appl.create_thread(
+        thread = (await self.channel_join_appl.create_thread(
             name=application.name,
             content=application.create_initial_message(),
             view=JoinApplicationDecideView(),
             allowed_mentions=discord.AllowedMentions(roles=True),
             applied_tags=[self.tag_appl_receive],
             reason=f"入会者フォーム回答({application.name} さん)"
-        )
+        )).thread
+
+        # add database
+        self.database_session.add_application(application, thread.id)
 
     @classmethod
     def add_application(cls, application: JoinApplication):
