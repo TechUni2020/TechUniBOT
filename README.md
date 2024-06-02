@@ -50,12 +50,13 @@ pipenv install
 Thanks goes to these wonderful people!!
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
+<!-- prettier-ignore-start
+-->
 <!-- markdownlint-disable -->
 <table>
   <tr>
     <td align="center"><a href="https://github.com/KO1231"><img src="https://github.com/TechUni2020/TechUniBOT/assets/124903312/d3317ef0-f926-42b3-9643-dc79f7e3711b" width="100px;" alt=""/><br /><sub><b>岡 和寛</b></sub></a>
-    <td align="center"><a href="https://github.com/gohan5858"><img src="" width="100px;" alt=""/><br /><sub><b>足立 里空</b></sub></a>
+    <td align="center"><a href="https://github.com/gohan5858"><img src="https://github.com/TechUni2020/TechUniBOT/assets/88976739/8bf9927b-b5dd-416c-82da-e459f51f2660" width="100px;" alt=""/><br /><sub><b>足立 里空</b></sub></a>
 </table>
 
 <!-- markdownlint-restore -->
