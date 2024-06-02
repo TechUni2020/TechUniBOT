@@ -24,7 +24,7 @@ class JoinApplicationStatus(Enum):
 
         return channel.get_tag(self._tag_id)
 
-    def get_email_template(self):
+    def get_email_template(self) -> EmailTemplate:
         if not self.need_send_email():
             raise RuntimeError(f"Email Template is not set in {self.name}.")
         return self._email_template
