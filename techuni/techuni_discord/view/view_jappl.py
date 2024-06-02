@@ -72,7 +72,7 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
         JoinApplicationDecideView.SEND_EMAIL_FUNCTION(
             JoinApplicationStatus.INVITE.get_email_template(),
             data.mail_address,
-            {"name": data.name, "invite_link": link.url}
+            {"name": data.name, "invite_url": link.url}
         )
         await thread.send(f"[メール送信] 招待メールを送信しました。")
 
