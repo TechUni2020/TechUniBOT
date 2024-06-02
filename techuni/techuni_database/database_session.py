@@ -20,10 +20,10 @@ class DatabaseSession:
         self.database_session.delete(data)
         self.commit()
 
-    def get_application(self, application: JoinApplication):
+    def get_application(self, application: JoinApplication) -> JoinApplicationTable:
         return self.database_session.query(JoinApplicationTable).filter_by(form_id=application.id).one()
 
-    def get_application_by_thread(self, thread_id: int):
+    def get_application_by_thread(self, thread_id: int) -> JoinApplicationTable:
         return self.database_session.query(JoinApplicationTable).filter_by(thread_id=thread_id).one()
 
     def commit(self):
