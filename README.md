@@ -1,15 +1,18 @@
 # Discord Bot for Tech.Uni
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=master&label=build%20(master))
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=develop&label=build%20(develop))
+![GitHub Actions Workflow Status - master](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=master&label=build%20(master))
+![GitHub Actions Workflow Status - develop](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=develop&label=build%20(develop))
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 
-![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/TechUni2020/TechUniBOT)
-![GitHub Pipenv locked dependency version](https://img.shields.io/github/pipenv/locked/dependency-version/TechUni2020/TechUniBOT/discord.py)
+![Python version](https://img.shields.io/github/pipenv/locked/python-version/TechUni2020/TechUniBOT)
+![discord.py version](https://img.shields.io/github/pipenv/locked/dependency-version/TechUni2020/TechUniBOT/discord.py)
+![SQLAlchemy version](https://img.shields.io/github/pipenv/locked/dependency-version/TechUni2020/TechUniBOT/sqlalchemy?label=SQLAlchemy)
 
 ## 使用技術
-- [Python](https://www.python.org/)
-- [discord.py](https://github.com/Rapptz/discord.py)
+- [Python 3.12.x](https://www.python.org/) 
+  - [discord.py](https://github.com/Rapptz/discord.py)
+  - [SQLAlchemy](https://www.sqlalchemy.org/)
+- [MySQL 8.0](https://www.mysql.com/jp/)
 - [Pipenv](https://github.com/pypa/pipenv) (for package management)
 
 ## セットアップ
