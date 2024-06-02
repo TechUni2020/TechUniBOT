@@ -64,6 +64,7 @@ class TechUniDiscordBot(commands.Bot):
         await self.add_cog(JoinApplicationCommand(self))
         JoinApplicationDecideView.FORUM_CHANNEL = self.channel_join_appl
         JoinApplicationDecideView.INVITE_FUNCTION = self.create_personal_invite
+        JoinApplicationDecideView.SEND_EMAIL_FUNCTION = self.email_controller.send
         JoinApplicationDecideView.DATABASE_SESSION = self.database_session
         print("TechUniDiscordBot is ready.")
 
@@ -118,5 +119,10 @@ class TechUniDiscordBot(commands.Bot):
         while not self.socket_applier.empty():
             application: JoinApplication = self.socket_applier.get()
             thread = await self.create_application_thread(application)
-            self.email_controller.send_joinapplication(application, JoinApplicationStatus.RECEIVE)
+
+            self.email_controller.send(
+                JoinApplicationStatus.RECEIVE.get_email_template(),
+                application.mail_address,
+                {"name": application.name}  # RECEIVE内で使用可能な変数
+            )
             await thread.send(f"[メール送信] 入会申請受付メールを送信しました。")
