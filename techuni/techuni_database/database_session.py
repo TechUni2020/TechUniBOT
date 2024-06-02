@@ -1,6 +1,7 @@
 from techuni.techuni_object import JoinApplication
 from techuni.techuni_database.model import JoinApplicationTable
 
+
 class DatabaseSession:
     def __init__(self, session):
         self.database_session = session

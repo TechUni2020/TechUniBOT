@@ -11,6 +11,7 @@ class JoinApplication:
 
     _appl_template_file = os.path.join(multi_dirname(__file__, 3), "template", "join_application.md")
     _appl_template = None
+
     def __init__(self, data: dict):
         # ID
         self.id: str = data["id"]
@@ -95,7 +96,6 @@ class JoinApplication:
             return JoinApplication(json.loads(socket_input)), None
         except Exception as e:
             return None, e
-
 
     def create_initial_message(self):
         mes = self.from_template()

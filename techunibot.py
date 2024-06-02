@@ -47,5 +47,6 @@ def main():
     socket_process.join()
     database_session.close()
 
+
 if __name__ == "__main__":
     main()
