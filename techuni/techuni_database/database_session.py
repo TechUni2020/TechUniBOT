@@ -21,10 +21,10 @@ class DatabaseSession:
         self.commit()
 
     def get_application(self, application: JoinApplication):
-        return self.database_session.query(JoinApplicationTable).filter_by(form_id=application.id).first()
+        return self.database_session.query(JoinApplicationTable).filter_by(form_id=application.id).one()
 
     def get_application_by_thread(self, thread_id: int):
-        return self.database_session.query(JoinApplicationTable).filter_by(thread_id=thread_id).first()
+        return self.database_session.query(JoinApplicationTable).filter_by(thread_id=thread_id).one()
 
     def commit(self):
         self.database_session.commit()
