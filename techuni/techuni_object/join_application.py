@@ -3,7 +3,6 @@ import json
 import hmac
 import hashlib
 import os
-import codecs
 from datetime import datetime
 from techuni.util import multi_dirname
 
@@ -86,7 +85,7 @@ class JoinApplication:
         if cls._appl_template is None:
             if not os.path.exists(cls._appl_template_file):
                 raise FileNotFoundError(f"Template file({cls._appl_template_file}) is not found")
-            with codecs.open(cls._appl_template_file, "r", "utf-8") as f:
+            with open(cls._appl_template_file, "r") as f:
                 cls._appl_template = f.read()
         return cls._appl_template
 
