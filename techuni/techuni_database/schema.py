@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer
 from sqlalchemy.orm import declarative_base
-from sqlalchemy.types import String
-from sqlalchemy.dialects.mysql import TEXT, BIGINT
+from sqlalchemy.types import String, TEXT, BigInteger
 
 Base = declarative_base()
 
@@ -13,7 +12,7 @@ class JoinApplicationTable(Base):
     form_id = Column(String(255), nullable=False, unique=True)
     mail_address = Column(TEXT, nullable=False)
     name = Column(TEXT, nullable=False)
-    thread_id = Column(BIGINT, nullable=False, unique=True)
+    thread_id = Column(BigInteger, nullable=False, unique=True)
 
     @classmethod
     def from_application(cls, application, thread_id):
