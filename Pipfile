@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 "discord.py" = "*"
+sqlalchemy = "*"
+mysqlclient = "*"
+pyyaml = "*"
 
 [dev-packages]
 

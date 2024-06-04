@@ -2,14 +2,19 @@ import discord
 import os
 from discord.ext import tasks, commands
 from multiprocessing import Queue
-from techuni import JoinApplication, JoinApplicationStatus
-from .commands import JoinApplicationCommand
-from .view import JoinApplicationDecideView
+from techuni.techuni_email import EmailController
+from techuni.techuni_object import JoinApplication, JoinApplicationStatus
+from techuni.techuni_discord.commands import JoinApplicationCommand
+from techuni.techuni_discord.view import JoinApplicationDecideView
+from techuni.techuni_database import DatabaseSession
 
 class TechUniDiscordBot(commands.Bot):
-    flask_applier: Queue = None
+    socket_applier: Queue = None
 
-    def __init__(self):
+    def __init__(self, email_controller: EmailController, database_session: DatabaseSession):
+        self.email_controller = email_controller
+        self.database_session = database_session
+
         intents = discord.Intents.default()
         intents.members = True
         intents.message_content = True
@@ -55,10 +60,12 @@ class TechUniDiscordBot(commands.Bot):
         if self.tag_appl_receive is None:
             raise ValueError("Receive Tag is not found")
 
-        self.checkForm.start()
+        self.check_receive_application.start()
         await self.add_cog(JoinApplicationCommand(self))
         JoinApplicationDecideView.FORUM_CHANNEL = self.channel_join_appl
         JoinApplicationDecideView.INVITE_FUNCTION = self.create_personal_invite
+        JoinApplicationDecideView.SEND_EMAIL_FUNCTION = self.email_controller.send
+        JoinApplicationDecideView.DATABASE_SESSION = self.database_session
         print("TechUniDiscordBot is ready.")
 
     async def setup_hook(self):
@@ -87,24 +94,35 @@ class TechUniDiscordBot(commands.Bot):
         )
         return invite
 
-    async def notify_application(self, application: JoinApplication):
-        await self.channel_join_appl.create_thread(
+    async def create_application_thread(self, application: JoinApplication) -> discord.Thread:
+        thread = (await self.channel_join_appl.create_thread(
             name=application.name,
             content=application.create_initial_message(),
             view=JoinApplicationDecideView(),
             allowed_mentions=discord.AllowedMentions(roles=True),
             applied_tags=[self.tag_appl_receive],
             reason=f"入会者フォーム回答({application.name} さん)"
-        )
+        )).thread
+
+        # add database
+        self.database_session.add_application(application, thread.id)
+        return thread
 
     @classmethod
     def add_application(cls, application: JoinApplication):
-        if cls.flask_applier is None:
-            raise ValueError("flask_applier is not set")
-        cls.flask_applier.put(application)
+        if cls.socket_applier is None:
+            raise ValueError("socket_applier is not set")
+        cls.socket_applier.put(application)
 
     @tasks.loop(seconds=5)
-    async def checkForm(self):
-        while not self.flask_applier.empty():
-            application: JoinApplication = self.flask_applier.get()
-            await self.notify_application(application)
+    async def check_receive_application(self):
+        while not self.socket_applier.empty():
+            application: JoinApplication = self.socket_applier.get()
+            thread = await self.create_application_thread(application)
+
+            self.email_controller.send(
+                JoinApplicationStatus.RECEIVE.get_email_template(),
+                application.mail_address,
+                {"name": application.name}  # RECEIVE内で使用可能な変数
+            )
+            await thread.send(f"[メール送信] 入会申請受付メールを送信しました。")

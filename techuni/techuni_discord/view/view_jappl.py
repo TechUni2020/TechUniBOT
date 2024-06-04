@@ -1,11 +1,13 @@
 import discord
 from .view import ConfirmView
-from techuni.techuni_object.join_application_status import JoinApplicationStatus
+from techuni.techuni_object import JoinApplicationStatus
 
 class JoinApplicationDecideView(discord.ui.View):
     FORUM_CHANNEL: discord.ForumChannel = None
     CONFIRM_TIMEOUT = 60
     INVITE_FUNCTION = None
+    SEND_EMAIL_FUNCTION = None
+    DATABASE_SESSION = None
 
     def __init__(self):
         super().__init__(timeout=None)
@@ -65,6 +67,15 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
             suppress_embeds=True  # 招待リンクの埋め込みを表示しない
         )
 
+        # メール送信
+        data = JoinApplicationDecideView.DATABASE_SESSION.get_application_by_thread(thread.id)
+        JoinApplicationDecideView.SEND_EMAIL_FUNCTION(
+            JoinApplicationStatus.INVITE.get_email_template(),
+            data.mail_address,
+            {"name": data.name, "invite_url": link.url}
+        )
+        await thread.send(f"[メール送信] 招待メールを送信しました。")
+
     else:
         new_tag_info = [JoinApplicationStatus.REJECT.get_tag(forum_channel)], "[フラグ設定] 入会申請の却下"
         await thread.send(
@@ -84,6 +95,8 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
 
     # スレッドのロック・クローズ処理
     await thread.edit(archived=True, locked=True)
+
+    JoinApplicationDecideView.DATABASE_SESSION.delete_application_by_thread(thread.id)
 
     return True
 
