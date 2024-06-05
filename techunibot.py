@@ -7,7 +7,7 @@ from techuni.techuni_discord import TechUniDiscordBot
 from techuni.techuni_socket import SocketServer
 from techuni.techuni_email import EmailTemplate, EmailClientManager, EmailController
 from techuni.techuni_database.schema import JoinApplicationTable
-from techuni.techuni_database import DatabaseSession
+from techuni.techuni_database import DatabaseSessionManager
 
 def socket_main(queue):
     TechUniDiscordBot.socket_applier = queue
@@ -22,7 +22,7 @@ def main():
     ## init database
     JoinApplicationTable.metadata.create_all(database_engine)
 
-    database_session = DatabaseSession(session_factory())
+    database_session_manager = DatabaseSessionManager(session_factory)
 
     # Socket
     socket_queue = Queue()
@@ -34,7 +34,7 @@ def main():
     email_controller = EmailController(client_manager)
 
     # Discord BOT
-    bot = TechUniDiscordBot(email_controller, database_session)
+    bot = TechUniDiscordBot(email_controller, database_session_manager)
 
     # --- Process Start --- #
     # Socket
@@ -45,7 +45,6 @@ def main():
     bot.run(str(os.environ.get("DISCORD_BOT_TOKEN")))
 
     socket_process.join()
-    database_session.close()
 
 
 if __name__ == "__main__":
