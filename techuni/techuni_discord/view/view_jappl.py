@@ -7,7 +7,7 @@ class JoinApplicationDecideView(discord.ui.View):
     CONFIRM_TIMEOUT = 60
     INVITE_FUNCTION = None
     SEND_EMAIL_FUNCTION = None
-    DATABASE_SESSION = None
+    DATABASE_SESSION_MANAGER = None
 
     def __init__(self):
         super().__init__(timeout=None)
@@ -55,48 +55,49 @@ async def set_application_status(interaction: discord.Interaction, status: bool)
         await interaction.followup.send("この申請は審査中ではありません。", ephemeral=True, timeout=30)
         return False
 
-    if status:
-        new_tag_info = [JoinApplicationStatus.INVITE.get_tag(forum_channel)], "[フラグ設定] 入会申請の受理"
-        await thread.send(
-            "この入会申請は受理されました。(実行者：{0})".format(interaction.user.mention),
-            allowed_mentions=discord.AllowedMentions(users=True)
-        )
-        link: discord.Invite = await JoinApplicationDecideView.INVITE_FUNCTION(thread.name)
-        await thread.send(
-            "招待リンク： ||{0}||".format(link.url),  # markdownのスポイラー(||)で目隠しして送信
-            suppress_embeds=True  # 招待リンクの埋め込みを表示しない
-        )
+    with JoinApplicationDecideView.DATABASE_SESSION_MANAGER as session:
+        if status:
+            new_tag_info = [JoinApplicationStatus.INVITE.get_tag(forum_channel)], "[フラグ設定] 入会申請の受理"
+            await thread.send(
+                "この入会申請は受理されました。(実行者：{0})".format(interaction.user.mention),
+                allowed_mentions=discord.AllowedMentions(users=True)
+            )
+            link: discord.Invite = await JoinApplicationDecideView.INVITE_FUNCTION(thread.name)
+            await thread.send(
+                "招待リンク： ||{0}||".format(link.url),  # markdownのスポイラー(||)で目隠しして送信
+                suppress_embeds=True  # 招待リンクの埋め込みを表示しない
+            )
 
-        # メール送信
-        data = JoinApplicationDecideView.DATABASE_SESSION.get_application_by_thread(thread.id)
-        JoinApplicationDecideView.SEND_EMAIL_FUNCTION(
-            JoinApplicationStatus.INVITE.get_email_template(),
-            data.mail_address,
-            {"name": data.name, "invite_url": link.url}
-        )
-        await thread.send(f"[メール送信] 招待メールを送信しました。")
+            # メール送信
+            data = session.get_application_by_thread(thread.id)
+            JoinApplicationDecideView.SEND_EMAIL_FUNCTION(
+                JoinApplicationStatus.INVITE.get_email_template(),
+                data.mail_address,
+                {"name": data.name, "invite_url": link.url}
+            )
+            await thread.send(f"[メール送信] 招待メールを送信しました。")
 
-    else:
-        new_tag_info = [JoinApplicationStatus.REJECT.get_tag(forum_channel)], "[フラグ設定] 入会申請の却下"
-        await thread.send(
-            "この入会申請は却下されました。(実行者：{0})".format(interaction.user.mention),
-            allowed_mentions=discord.AllowedMentions(users=True)
-        )
+        else:
+            new_tag_info = [JoinApplicationStatus.REJECT.get_tag(forum_channel)], "[フラグ設定] 入会申請の却下"
+            await thread.send(
+                "この入会申請は却下されました。(実行者：{0})".format(interaction.user.mention),
+                allowed_mentions=discord.AllowedMentions(users=True)
+            )
 
-    # タグ設定
-    await thread.edit(applied_tags=new_tag_info[0], reason=new_tag_info[1])
+        # タグ設定
+        await thread.edit(applied_tags=new_tag_info[0], reason=new_tag_info[1])
 
-    # 受理・却下ボタン(View)削除
-    try:
-        first_message = await thread.fetch_message(thread.id)  # is not None (ないときはNotFound例外)
-        await first_message.edit(view=None)
-    except discord.NotFound:
-        pass
+        # 受理・却下ボタン(View)削除
+        try:
+            first_message = await thread.fetch_message(thread.id)  # is not None (ないときはNotFound例外)
+            await first_message.edit(view=None)
+        except discord.NotFound:
+            pass
 
-    # スレッドのロック・クローズ処理
-    await thread.edit(archived=True, locked=True)
+        # スレッドのロック・クローズ処理
+        await thread.edit(archived=True, locked=True)
 
-    JoinApplicationDecideView.DATABASE_SESSION.delete_application_by_thread(thread.id)
+        session.delete_application_by_thread(thread.id)
 
     return True
 
