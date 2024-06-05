@@ -6,14 +6,14 @@ from techuni.techuni_email import EmailController
 from techuni.techuni_object import JoinApplication, JoinApplicationStatus
 from techuni.techuni_discord.commands import JoinApplicationCommand
 from techuni.techuni_discord.view import JoinApplicationDecideView
-from techuni.techuni_database import DatabaseSession
+from techuni.techuni_database import DatabaseSessionManager
 
 class TechUniDiscordBot(commands.Bot):
     socket_applier: Queue = None
 
-    def __init__(self, email_controller: EmailController, database_session: DatabaseSession):
+    def __init__(self, email_controller: EmailController, database_session_manager: DatabaseSessionManager):
         self.email_controller = email_controller
-        self.database_session = database_session
+        self.database_session_manager = database_session_manager
 
         intents = discord.Intents.default()
         intents.members = True
@@ -65,7 +65,7 @@ class TechUniDiscordBot(commands.Bot):
         JoinApplicationDecideView.FORUM_CHANNEL = self.channel_join_appl
         JoinApplicationDecideView.INVITE_FUNCTION = self.create_personal_invite
         JoinApplicationDecideView.SEND_EMAIL_FUNCTION = self.email_controller.send
-        JoinApplicationDecideView.DATABASE_SESSION = self.database_session
+        JoinApplicationDecideView.DATABASE_SESSION_MANAGER = self.database_session_manager
         print("TechUniDiscordBot is ready.")
 
     async def setup_hook(self):
@@ -105,7 +105,8 @@ class TechUniDiscordBot(commands.Bot):
         )).thread
 
         # add database
-        self.database_session.add_application(application, thread.id)
+        with self.database_session_manager as session:
+            session.add_application(application, thread.id)
         return thread
 
     @classmethod
