@@ -10,10 +10,19 @@ class EmailClient:
         self.organization = str(data["organization"])
 
         _smtp_data = data["smtp"]
-        self.smtp_server = self._init_smtp(_smtp_data["ssl"], _smtp_data["host"], _smtp_data["port"], _smtp_data["user"], _smtp_data["password"])
+        self._smtp_login_data = (_smtp_data["ssl"], _smtp_data["host"], _smtp_data["port"], _smtp_data["user"], _smtp_data["password"])
 
         _imap_data = data["imap"]
-        self.imap_server = self._init_imap(_imap_data["ssl"], _imap_data["host"], _imap_data["port"], _imap_data["user"], _imap_data["password"], _imap_data.get("ROOT", ""))
+        self._imap_login_data = (_imap_data["ssl"], _imap_data["host"], _imap_data["port"], _imap_data["user"], _imap_data["password"], _imap_data.get("ROOT", ""))
+
+    def __enter__(self):
+        self.smtp_server = self._init_smtp(*self._smtp_login_data)
+        self.imap_server = self._init_imap(*self._imap_login_data)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.imap_server.logout()
+        self.smtp_server.quit()
 
     def _init_smtp(self, ssl_type: str, host: str, port: int, user: str, password: str):
         _smtp_ssl = str(ssl_type).upper()
