@@ -35,7 +35,7 @@ class SocketServer:
 
             else:
                 TechUniDiscordBot.add_application(app)
-                print(f"data = {str(app)}")
+                print(f"data id = {app.id}")
                 await loop.sock_sendall(client, b"OK.")
 
         except (ConnectionError, BrokenPipeError, OSError) as e:
