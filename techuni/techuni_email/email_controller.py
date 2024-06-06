@@ -2,6 +2,7 @@ import time
 import imaplib
 import email.utils
 from email.message import EmailMessage
+from email.header import Header
 from techuni.techuni_email import EmailTemplate, EmailClientManager
 
 class EmailController:
@@ -15,11 +16,11 @@ class EmailController:
         with self._client_manager.get(template.from_address) as from_client:
             msg = EmailMessage()
             msg["Message-ID"] = email.utils.make_msgid(domain=from_client.get_domain())
-            msg["From"] = from_client.get_header()
+            msg["From"] = EmailController._encode_header(from_client.get_header())
             msg["To"] = ", ".join(to)
-            msg["Subject"] = template.subject
+            msg["Subject"] = EmailController._encode_header(template.subject)
             msg["Date"] = email.utils.formatdate()
-            msg["Organization"] = from_client.organization
+            msg["Organization"] = EmailController._encode_header(from_client.organization)
 
             for subtype in template.subtypes:
                 content = template.get_template(subtype)
@@ -43,3 +44,7 @@ class EmailController:
             val = getattr(obj, attr)
             template = template.replace(f"%%{attr}%%", str(val))
         return template
+
+    @staticmethod
+    def _encode_header(content):
+        return Header(content, "utf-8").encode(maxlinelen=0)
