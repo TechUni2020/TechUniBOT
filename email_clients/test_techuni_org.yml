@@ -9,6 +9,7 @@ imap:
   user: ""
   password: ""
   ROOT: ""
+  SENT_BOX: "Sent"
 
 smtp:
     host: ""

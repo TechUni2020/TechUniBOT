@@ -15,6 +15,7 @@ class EmailClient:
         _imap_data = data["imap"]
         self._imap_login_data = (_imap_data["ssl"], _imap_data["host"], _imap_data["port"], _imap_data["user"], _imap_data["password"])
         self._IMAP_ROOT = _imap_data.get("ROOT", "")
+        self._imap_sent_box = _imap_data.get("SENT_BOX", "Sent")
 
     def __enter__(self):
         self.smtp_server = self._init_smtp(*self._smtp_login_data)
@@ -65,10 +66,19 @@ class EmailClient:
             raise ValueError(f"Invalid SSL Argument: {_imap_ssl}. Address: {self.address} Name: {self.name}")
 
         server.login(user, password)
+
+        # SENT BOX CHECK(SELECTはしない)
+        status, _ = server.status(self.get_sent_box_name(), "(MESSAGES)")
+        if status != "OK":
+            raise RuntimeError(f"Sent Box does not exist. Address: {self.address} Name: {self.name} Box: {self.get_sent_box_name()}")
+
         return server
 
     def get_box_name(self, box: str) -> str:
         return self._IMAP_ROOT + "." + box
+
+    def get_sent_box_name(self) -> str:
+        return self.get_box_name(self._imap_sent_box)
 
     def get_domain(self) -> str:
         return self.address.split("@")[1]

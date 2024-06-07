@@ -30,7 +30,7 @@ class EmailController:
 
             from_client.smtp_server.send_message(msg)
             from_client.imap_server.append(
-                from_client.get_box_name("Sent"),
+                from_client.get_sent_box_name(),
                 "\\Seen",
                 imaplib.Time2Internaldate(time.time()),
                 msg.as_string().encode("utf-8")
