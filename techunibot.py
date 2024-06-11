@@ -16,7 +16,7 @@ def socket_main(queue):
 
 def main():
     # Database
-    database_engine = create_engine(str(os.environ.get("DATABASE_URL")), echo=False)
+    database_engine = create_engine(str(os.environ.get("DATABASE_URL")), echo=False, pool_pre_ping=True)
     session_factory = sessionmaker(bind=database_engine, autoflush=True, autocommit=False)
 
     ## init database
