@@ -1,7 +1,7 @@
 import os
 from enum import Enum, auto
 from discord import ForumChannel
-from techuni.techuni_email import EmailTemplate
+from techuni.email import EmailTemplate
 
 class JoinApplicationStatus(Enum):
     RECEIVE = (auto(), EmailTemplate.RECEIVE),
