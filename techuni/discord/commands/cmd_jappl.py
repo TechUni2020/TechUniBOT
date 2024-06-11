@@ -1,6 +1,6 @@
 from discord.ext import commands
-from techuni.techuni_discord.command.checker import check_guild
-from techuni.techuni_discord.command.check_error import OutOfTechUniGuildError
+from techuni.discord.command.checker import check_guild
+from techuni.discord.command.check_error import OutOfTechUniGuildError
 
 class JoinApplicationCommand(commands.Cog):
     def __init__(self, bot):

@@ -1,7 +1,7 @@
 import os
 from yaml import safe_load
 from techuni.util import multi_dirname
-from techuni.techuni_email import EmailClient
+from techuni.email import EmailClient
 
 class EmailClientManager:
     _FOLDER = os.path.join(multi_dirname(__file__, 3), "email_clients")

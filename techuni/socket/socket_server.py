@@ -1,8 +1,8 @@
 import asyncio
 import socket
 from asyncio.events import AbstractEventLoop
-from techuni.techuni_object import JoinApplication
-from techuni.techuni_discord import TechUniDiscordBot
+from techuni.object import JoinApplication
+from techuni.discord import TechUniDiscordBot
 
 class SocketServer:
     def __init__(self, host: str, port: int):

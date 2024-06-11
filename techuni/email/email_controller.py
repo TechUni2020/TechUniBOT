@@ -3,7 +3,7 @@ import email.utils
 from email.message import EmailMessage
 from email.header import Header
 from datetime import datetime, timezone, timedelta
-from techuni.techuni_email import EmailTemplate, EmailClientManager
+from techuni.email import EmailTemplate, EmailClientManager
 
 class EmailController:
     TIMEZONE = timezone(timedelta(hours=9))
