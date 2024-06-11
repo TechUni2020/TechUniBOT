@@ -3,7 +3,7 @@ import imaplib
 import email.utils
 from email.message import EmailMessage
 from email.header import Header
-from techuni.techuni_email import EmailTemplate, EmailClientManager
+from techuni.email import EmailTemplate, EmailClientManager
 
 class EmailController:
     def __init__(self, client_manager: EmailClientManager):
