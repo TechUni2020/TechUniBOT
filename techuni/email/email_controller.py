@@ -1,11 +1,12 @@
-import time
 import imaplib
 import email.utils
 from email.message import EmailMessage
 from email.header import Header
-from techuni.techuni_email import EmailTemplate, EmailClientManager
+from datetime import datetime, timezone, timedelta
+from techuni.email import EmailTemplate, EmailClientManager
 
 class EmailController:
+    TIMEZONE = timezone(timedelta(hours=9))
     def __init__(self, client_manager: EmailClientManager):
         self._client_manager = client_manager
 
@@ -15,11 +16,13 @@ class EmailController:
 
         with self._client_manager.get(template.from_address) as from_client:
             msg = EmailMessage()
+            msg_time = datetime.now(EmailController.TIMEZONE)
+
             msg["Message-ID"] = email.utils.make_msgid(domain=from_client.get_domain())
             msg["From"] = EmailController._encode_header(from_client.get_header())
             msg["To"] = ", ".join(to)
             msg["Subject"] = EmailController._encode_header(template.subject)
-            msg["Date"] = email.utils.formatdate()
+            msg["Date"] = email.utils.format_datetime(msg_time)
             msg["Organization"] = EmailController._encode_header(from_client.organization)
 
             for subtype in template.subtypes:
@@ -30,9 +33,9 @@ class EmailController:
 
             from_client.smtp_server.send_message(msg)
             from_client.imap_server.append(
-                from_client.get_box_name("Sent"),
+                from_client.get_sent_box_name(),
                 "\\Seen",
-                imaplib.Time2Internaldate(time.time()),
+                imaplib.Time2Internaldate(msg_time),
                 msg.as_string().encode("utf-8")
             )
 

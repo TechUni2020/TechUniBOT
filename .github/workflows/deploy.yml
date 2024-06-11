@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install SSH Key for Deploy
+      - name: Deploy to server(Run deploy script)
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}

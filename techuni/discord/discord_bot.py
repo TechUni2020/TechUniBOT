@@ -2,11 +2,11 @@ import discord
 import os
 from discord.ext import tasks, commands
 from multiprocessing import Queue
-from techuni.techuni_email import EmailController
-from techuni.techuni_object import JoinApplication, JoinApplicationStatus
-from techuni.techuni_discord.commands import JoinApplicationCommand
-from techuni.techuni_discord.view import JoinApplicationDecideView
-from techuni.techuni_database import DatabaseSessionManager
+from techuni.email import EmailController
+from techuni.object import JoinApplication, JoinApplicationStatus
+from techuni.discord.commands import JoinApplicationCommand
+from techuni.discord.view import JoinApplicationDecideView
+from techuni.database import DatabaseSessionManager
 
 class TechUniDiscordBot(commands.Bot):
     socket_applier: Queue = None

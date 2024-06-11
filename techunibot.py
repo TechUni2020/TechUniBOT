@@ -3,11 +3,11 @@ import asyncio
 from multiprocessing import Process, Queue
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from techuni.techuni_discord import TechUniDiscordBot
-from techuni.techuni_socket import SocketServer
-from techuni.techuni_email import EmailTemplate, EmailClientManager, EmailController
-from techuni.techuni_database.schema import JoinApplicationTable
-from techuni.techuni_database import DatabaseSessionManager
+from techuni.discord import TechUniDiscordBot
+from techuni.socket import SocketServer
+from techuni.email import EmailTemplate, EmailClientManager, EmailController
+from techuni.database.schema import JoinApplicationTable
+from techuni.database import DatabaseSessionManager
 
 def socket_main(queue):
     TechUniDiscordBot.socket_applier = queue
@@ -16,7 +16,7 @@ def socket_main(queue):
 
 def main():
     # Database
-    database_engine = create_engine(str(os.environ.get("DATABASE_URL")), echo=False)
+    database_engine = create_engine(str(os.environ.get("DATABASE_URL")), echo=False, pool_pre_ping=True)
     session_factory = sessionmaker(bind=database_engine, autoflush=True, autocommit=False)
 
     ## init database

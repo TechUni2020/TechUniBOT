@@ -1,6 +1,6 @@
 from sqlalchemy.orm import sessionmaker
-from techuni.techuni_object import JoinApplication
-from techuni.techuni_database.schema import JoinApplicationTable
+from techuni.object import JoinApplication
+from techuni.database.schema import JoinApplicationTable
 
 
 class DatabaseSessionManager:
