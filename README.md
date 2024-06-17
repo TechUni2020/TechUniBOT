@@ -1,4 +1,4 @@
-# Discord Bot for Tech.Uni
+# Tech.Uni Bot
 
 ![GitHub Actions Workflow Status - master](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=master&label=build%20(master))
 ![GitHub Actions Workflow Status - develop](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=develop&label=build%20(develop))
@@ -37,7 +37,7 @@ pip install pipenv
 ### ③ リポジトリのクローン
 このリポジトリをローカル環境にクローンしましょう。
 ```
-git clone https://github.com/KO1231/TechUniBOT
+git clone https://github.com/TechUni2020/TechUniBOT
 ```
 
 ### ④ パッケージのインストール
