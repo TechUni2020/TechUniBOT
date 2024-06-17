@@ -1,4 +1,4 @@
-# Discord Bot for Tech.Uni
+# Tech.Uni Bot
 
 ![GitHub Actions Workflow Status - master](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=master&label=build%20(master))
 ![GitHub Actions Workflow Status - develop](https://img.shields.io/github/actions/workflow/status/TechUni2020/TechUniBOT/deploy.yml?branch=develop&label=build%20(develop))
