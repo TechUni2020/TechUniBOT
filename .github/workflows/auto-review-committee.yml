@@ -5,6 +5,10 @@ on:
     branches:
       - develop
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}-to-${{ github.base_ref }}
+  cancel-in-progress: true
+
 env:
   TEAM_NAME: committee
   REVIEWER_TOKEN: ${{ secrets.AUTO_REVIEW_KEY }}
