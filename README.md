@@ -37,7 +37,7 @@ pip install pipenv
 ### ③ リポジトリのクローン
 このリポジトリをローカル環境にクローンしましょう。
 ```
-git clone https://github.com/KO1231/TechUniBOT
+git clone https://github.com/TechUni2020/TechUniBOT
 ```
 
 ### ④ パッケージのインストール
