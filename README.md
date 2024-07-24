@@ -12,7 +12,6 @@
 - [Python 3.12.x](https://www.python.org/) 
   - [discord.py](https://github.com/Rapptz/discord.py)
   - [SQLAlchemy](https://www.sqlalchemy.org/)
-- [MySQL 8.0](https://www.mysql.com/jp/)
 - [Pipenv](https://github.com/pypa/pipenv) (for package management)
 
 ## セットアップ
